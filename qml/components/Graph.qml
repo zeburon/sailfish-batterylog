@@ -147,7 +147,7 @@ Item
             context.lineCap = "round";
             context.translate(0, lineWidth / 2);
 
-            var lastX, lastY, newX, newY, segmentLength, segmentCharging, segmentActive;
+            var lastX, lastY, newX, newY, segmentCharging, segmentActive, segmentLength = 0, sessionLength = 0;
             for (var idx = entries.length - 1; idx >= 0; --idx)
             {
                 var entry = entries[idx];
@@ -161,20 +161,32 @@ Item
                 newX = Math.round((time - startTime) * xPerMilliSecond);
                 newY = Math.round(energyLineHeight * (1.0 - energy / energyFullValue));
 
-                // current entry
-                if (idx === entries.length - 1)
+                // start of a new session
+                if (sessionLength === 0)
                 {
-                    context.moveTo(newX, newY);
-                    currentX = newX;
-                    currentY = newY + yOffset;
+                    context.moveTo(newX + 1, newY);
                     segmentCharging = charging;
                     segmentActive = active;
-                    currentColor = getLineColor(segmentCharging, segmentActive);
+                    if (idx === entries.length - 1)
+                    {
+                        currentX = newX;
+                        currentY = newY + yOffset;
+                        currentColor = getLineColor(segmentCharging, segmentActive);
+                    }
                 }
-                // new segment detected
-                else if (event === "Start" || charging !== segmentCharging || active !== segmentActive)
+                // end of current session
+                else if (event === "Start")
                 {
-                    // finish old segment
+                    context.lineTo(newX, newY);
+                    context.strokeStyle = getLineColor(segmentCharging, segmentActive);
+                    context.stroke();
+                    sessionLength = 0;
+                    continue;
+                }
+                // end of current segment - start with a new one
+                else if (charging !== segmentCharging || active !== segmentActive)
+                {
+                    // finish old segment: only visible if length is longer than 1 pixel
                     if (segmentLength === 0)
                     {
                         var singleX = newX, singleY = newY;
@@ -199,16 +211,17 @@ Item
                     segmentLength = 0;
                 }
                 // continue with segment
-                else if (idx === 0 || Math.abs(newX - lastX) > mergeLength || Math.abs(newY - lastY) > mergeLength)
+                else if (Math.abs(newX - lastX) > mergeLength || Math.abs(newY - lastY) > mergeLength)
                 {
-                    ++segmentLength;
                     context.lineTo(newX, newY);
+                    ++segmentLength;
                 }
                 else
                 {
                     continue;
                 }
 
+                ++sessionLength;
                 lastX = newX;
                 lastY = newY;
             }
