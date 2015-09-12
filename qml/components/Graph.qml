@@ -194,7 +194,7 @@ Item
                     segmentLength = 0;
                 }
                 // continue with segment
-                else if (Math.abs(newX - lastX) > mergeLength || Math.abs(newY - lastY) > mergeLength)
+                else if (idx === 0 || Math.abs(newX - lastX) > mergeLength || Math.abs(newY - lastY) > mergeLength)
                 {
                     ++segmentLength;
                     context.lineTo(newX, newY);
