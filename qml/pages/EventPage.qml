@@ -22,7 +22,7 @@ Page
     {
         var currentDate = new Date(Date.now());
 
-        var events = logs.getLatestEnergyEvents(10);
+        var events = logs.getLatestEnergyEvents(Globals.INITIAL_EVENT_PAGE_DAY_COUNT);
         for (var idx = 0; idx < events.length; ++idx)
         {
             var time     = events[idx][0];
@@ -38,6 +38,9 @@ Page
         if (event !== "")
         {
             itemModel.append({"itemTime": time, "itemEnergy": energy, "itemCharging": charging, "itemEvent": event});
+            if (itemModel.count > Globals.MAX_EVENT_PAGE_ENTRY_COUNT)
+                itemModel.remove(0);
+
             itemListScrollTimer.start();
         }
     }
