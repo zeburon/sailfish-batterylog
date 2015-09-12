@@ -186,7 +186,7 @@ Page
                         else return qsTr("when fully charged");
                     }
                     else
-                        return qsTr("still collecting data");
+                        return qsTr("more data required");
                 }
                 color: Theme.secondaryColor
                 horizontalAlignment: Text.AlignHCenter
@@ -228,6 +228,75 @@ Page
                     {
                         ++graph.dayOffset;
                         graph.refresh();
+                    }
+                }
+            }
+            Row
+            {
+                id: graphLegendRow
+
+                width: parent.width
+                height: 10
+                opacity: 0.75
+
+                Item
+                {
+                    id: graphLegendDischarging
+
+                    width: parent.width / 2
+                    height: parent.height
+
+                    GraphLegendItemRight
+                    {
+                        anchors { left: parent.left; right: dischargingLabel.left; verticalCenter: parent.verticalCenter}
+                        height: parent.height
+                        itemColor: graph.lineColorDischargingActive
+                        itemLabel: qsTr("on")
+                    }
+                    GraphLegendCategory
+                    {
+                        id: dischargingLabel
+
+                        anchors { centerIn: parent }
+                        height: parent.height
+                        categoryLabel: qsTr("discharging")
+                    }
+                    GraphLegendItemLeft
+                    {
+                        anchors { left: dischargingLabel.right; right: parent.right; verticalCenter: parent.verticalCenter}
+                        height: parent.height
+                        itemColor: graph.lineColorDischargingInactive
+                        itemLabel: qsTr("standby")
+                    }
+                }
+                Item
+                {
+                    id: graphLegendCharging
+
+                    width: parent.width / 2
+                    height: parent.height
+
+                    GraphLegendItemRight
+                    {
+                        anchors { left: parent.left; right: chargingLabel.left; verticalCenter: parent.verticalCenter}
+                        height: parent.height
+                        itemColor: graph.lineColorChargingActive
+                        itemLabel: qsTr("on")
+                    }
+                    GraphLegendCategory
+                    {
+                        id: chargingLabel
+
+                        anchors { centerIn: parent }
+                        height: parent.height
+                        categoryLabel: qsTr("charging")
+                    }
+                    GraphLegendItemLeft
+                    {
+                        anchors { left: chargingLabel.right; right: parent.right; verticalCenter: parent.verticalCenter}
+                        height: parent.height
+                        itemColor: graph.lineColorChargingInactive
+                        itemLabel: qsTr("standby")
                     }
                 }
             }

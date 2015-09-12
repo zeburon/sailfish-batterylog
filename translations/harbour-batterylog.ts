@@ -97,7 +97,23 @@
         <translation></translation>
     </message>
     <message>
-        <source>still collecting data</source>
+        <source>on</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>discharging</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>charging</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>more data required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>standby</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

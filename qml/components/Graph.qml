@@ -18,6 +18,11 @@ Item
     property int lineWidth: 4
     property int energyFullValue: batteryInfo.energyFull
 
+    property color lineColorChargingActive: "#ffc0cc00"
+    property color lineColorChargingInactive: "#cc66a621"
+    property color lineColorDischargingActive: "#ffffcc77"
+    property color lineColorDischargingInactive: "#bbaaaaaa"
+
     // -----------------------------------------------------------------------
 
     function refresh()
@@ -58,16 +63,16 @@ Item
             if (charging)
             {
                 if (active)
-                    return "#ffc0ff00";
+                    return lineColorChargingActive;
                 else
-                    return "#cc66a621";
+                    return lineColorChargingInactive;
             }
             else
             {
                 if (active)
-                    return "#ffbbbb00";
+                    return lineColorDischargingActive;
                 else
-                    return "#bbaaaaaa";
+                    return lineColorDischargingInactive;
             }
         }
 

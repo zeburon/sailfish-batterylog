@@ -97,8 +97,24 @@
         <translation>Zustand</translation>
     </message>
     <message>
-        <source>still collecting data</source>
-        <translation>sammle Daten</translation>
+        <source>on</source>
+        <translation>ein</translation>
+    </message>
+    <message>
+        <source>discharging</source>
+        <translation>entladen</translation>
+    </message>
+    <message>
+        <source>charging</source>
+        <translation>laden</translation>
+    </message>
+    <message>
+        <source>more data required</source>
+        <translation>benötige mehr Daten</translation>
+    </message>
+    <message>
+        <source>standby</source>
+        <translation>Standby</translation>
     </message>
 </context>
 <context>

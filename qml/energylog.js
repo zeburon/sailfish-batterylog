@@ -137,6 +137,7 @@ function getAveragePower(dayCount)
                     sum += lastEnergy - energy;
                     duration += (time - lastTime);
                 }
+
                 lastTime = time;
                 lastEnergy = energy;
                 lastEvent = event;

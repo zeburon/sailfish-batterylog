@@ -39,7 +39,10 @@ OTHER_FILES += qml/harbour-batterylog.qml \
     qml/components/Event.qml \
     qml/timeformat.js \
     qml/pages/AboutPage.qml \
-    qml/gfx/about.png
+    qml/gfx/about.png \
+    qml/components/GraphLegendItemLeft.qml \
+    qml/components/GraphLegendItemRight.qml \
+    qml/components/GraphLegendCategory.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line
