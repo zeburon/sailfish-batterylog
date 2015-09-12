@@ -117,17 +117,16 @@ Item
         onPaint:
         {
             var entries = logs.getLatestEnergyEntries(dayCount, dayOffset);
-            var context = getContext("2d");
-            context.reset();
-
-            if (entries.length < 1)
-            {
-                currentX = currentY = -1;
-                return;
-            }
-
             var startTime = new Date(Date.now());
             startTime.setDate(startTime.getDate() - dayOffset - dayCount);
+
+            var context = getContext("2d");
+            context.reset();
+            currentX = currentY = -1;
+
+            // empty graph: no entries found
+            if (entries.length < 1)
+                return;
 
             context.globalAlpha = 0.3;
 
@@ -167,7 +166,9 @@ Item
                     context.moveTo(newX + 1, newY);
                     segmentCharging = charging;
                     segmentActive = active;
-                    if (idx === entries.length - 1)
+
+                    // this is the latest entry
+                    if (dayOffset === 0 && idx === entries.length - 1)
                     {
                         currentX = newX;
                         currentY = newY + yOffset;
@@ -225,7 +226,6 @@ Item
                 lastX = newX;
                 lastY = newY;
             }
-
             context.strokeStyle = getLineColor(segmentCharging, segmentActive);
             context.stroke();
             reachedStart = lastX > 10;
