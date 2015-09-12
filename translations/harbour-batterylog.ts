@@ -96,6 +96,10 @@
         <source>Health</source>
         <translation></translation>
     </message>
+    <message>
+        <source>still collecting data</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SecondPage</name>

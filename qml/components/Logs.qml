@@ -71,6 +71,7 @@ Item
     function updateAveragePower()
     {
         averagePowerNow = PowerLog.getAverageNow();
+
         remainingMinutesNow = getRemainingMinutes(averagePowerNow);
         remainingTimeNowShort = TimeFormat.getShortTimeString(remainingMinutesNow);
         remainingTimeNowLong = TimeFormat.getLongTimeString(remainingMinutesNow);
@@ -86,6 +87,9 @@ Item
     function updateAverageEnergy()
     {
         averagePowerPrognosis = EnergyLog.getAveragePower(1);
+        if (averagePowerPrognosis < 1 && !charging)
+            averagePowerPrognosis = averagePowerTrend;
+
         remainingMinutesPrognosis = getRemainingMinutes(averagePowerPrognosis);
         remainingTimePrognosisShort = TimeFormat.getShortTimeString(remainingMinutesPrognosis);
         remainingTimePrognosisLong = TimeFormat.getLongTimeString(remainingMinutesPrognosis);

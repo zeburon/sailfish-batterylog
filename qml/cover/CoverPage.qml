@@ -143,7 +143,7 @@ CoverBackground
         Label
         {
             width: parent.width
-            text: logs.averagePowerPrognosis + " mW"
+            text: (logs.averagePowerPrognosis > 0 ? logs.averagePowerPrognosis : "?") + " mW"
             color: Theme.primaryColor
             horizontalAlignment: Text.AlignHCenter
             font { family: Theme.fontFamily; pixelSize: Theme.fontSizeLarge }

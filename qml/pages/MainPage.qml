@@ -130,7 +130,15 @@ Page
                 id: remainingTimeLabel
 
                 width: parent.width
-                text: logs.charging ? logs.remainingTimeTrendLong : logs.remainingTimePrognosisLong
+                text:
+                {
+                    if (logs.charging)
+                        return logs.remainingTimeTrendLong;
+                    else if (logs.averagePowerPrognosis > 0)
+                        return logs.remainingTimePrognosisLong;
+                    else
+                        return logs.remainingTimeTrendLong;
+                }
                 color: Theme.primaryColor
                 horizontalAlignment: Text.AlignHCenter
                 font { family: Theme.fontFamily; pixelSize: Theme.fontSizeLarge }
@@ -150,7 +158,18 @@ Page
             Label
             {
                 width: parent.width
-                text: logs.charging ? logs.remainingTimePrognosisLong : logs.remainingTimeFullPrognosisLong
+                text:
+                {
+                    if (logs.averagePowerPrognosis > 0)
+                    {
+                        if (logs.charging)
+                            return logs.remainingTimePrognosisLong;
+                        else
+                            return logs.remainingTimeFullPrognosisLong;
+                    }
+                    else
+                        return "";
+                }
                 color: Theme.primaryColor
                 horizontalAlignment: Text.AlignHCenter
                 font { family: Theme.fontFamily; pixelSize: Theme.fontSizeLarge }
@@ -158,7 +177,17 @@ Page
             Label
             {
                 width: parent.width
-                text: logs.charging ? qsTr("when unplugged now") : qsTr("when fully charged")
+                text:
+                {
+                    if (logs.averagePowerPrognosis > 0)
+                    {
+                        if (logs.charging)
+                            return qsTr("when unplugged now");
+                        else return qsTr("when fully charged");
+                    }
+                    else
+                        return qsTr("still collecting data");
+                }
                 color: Theme.secondaryColor
                 horizontalAlignment: Text.AlignHCenter
                 font { family: Theme.fontFamily; pixelSize: Theme.fontSizeLarge }
