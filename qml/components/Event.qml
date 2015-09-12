@@ -20,12 +20,12 @@ Item
         }
         return event;
     }
-    property int capacity: Math.round(100.0 * energy / batteryInfo.energyFull)
+    property int capacity: Math.min(100.0, Math.round(100.0 * energy / batteryInfo.energyFull))
 
     property date nextTime
     property int nextEnergy
     property string nextEvent
-    property int nextCapacity: Math.round(100.0 * nextEnergy / batteryInfo.energyFull)
+    property int nextCapacity: Math.min(100.0, Math.round(100.0 * nextEnergy / batteryInfo.energyFull))
     property int capacityChange: Math.abs(isCurrentEvent ? batteryInfo.capacity - capacity : capacity - nextCapacity)
     property int timeDurationInMinutes: Math.floor((nextTime - time) / 60000)
     property string timeDurationString: TimeFormat.getLongTimeString(timeDurationInMinutes)
