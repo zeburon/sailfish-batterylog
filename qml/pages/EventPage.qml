@@ -49,7 +49,7 @@ Page
     {
         if (pageActive)
         {
-            itemList.scrollToTop();
+            itemList.positionViewAtEnd();
             updateEventDuration();
             updateDurationTimer.start();
         }
@@ -77,7 +77,7 @@ Page
             title: qsTr("Event Log")
             anchors { left: parent.left; right: parent.right; top: parent.top }
         }
-        SilicaListView
+        ListView
         {
             id: itemList
 
@@ -124,7 +124,7 @@ Page
             repeat: false
             onTriggered:
             {
-                itemList.scrollToTop();
+                itemList.positionViewAtEnd();
             }
         }
     }
