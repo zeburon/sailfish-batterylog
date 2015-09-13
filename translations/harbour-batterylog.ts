@@ -116,6 +116,10 @@
         <source>standby</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>fully charged</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SecondPage</name>

@@ -132,7 +132,9 @@ Page
                 width: parent.width
                 text:
                 {
-                    if (logs.charging)
+                    if (logs.full)
+                        return qsTr("fully charged");
+                    else if (logs.charging)
                         return logs.remainingTimeTrendLong;
                     else if (logs.averagePowerPrognosis > 0)
                         return logs.remainingTimePrognosisLong;
@@ -148,8 +150,15 @@ Page
                 id: remainingTimeDescriptionLabel
 
                 width: parent.width
-                text: logs.charging ? qsTr("until full") : qsTr("until empty")
-                visible: remainingTimeLabel.text !== ""
+                text:
+                {
+                    if (logs.full)
+                        return "";
+                    else if (logs.charging)
+                        return qsTr("until full");
+                    else
+                        return qsTr("until empty");
+                }
                 color: Theme.secondaryColor
                 horizontalAlignment: Text.AlignHCenter
                 font { family: Theme.fontFamily; pixelSize: Theme.fontSizeLarge }
@@ -183,7 +192,8 @@ Page
                     {
                         if (logs.charging)
                             return qsTr("when unplugged now");
-                        else return qsTr("when fully charged");
+                        else
+                            return qsTr("when fully charged");
                     }
                     else
                         return qsTr("more data required");
