@@ -79,7 +79,7 @@ CoverBackground
         Item
         {
             width: parent.width
-            height: Theme.paddingSmall
+            height: Theme.paddingLarge
         }
         Label
         {
