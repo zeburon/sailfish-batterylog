@@ -130,7 +130,7 @@ Item
 
             anchors { right: parent.right; verticalCenter: startCapacityLabel.verticalCenter }
             text: Qt.formatDateTime(time)
-            opacity: 0.75
+            opacity: 0.6
             horizontalAlignment: Text.AlignRight
             verticalAlignment: Text.AlignVCenter
             color: Theme.secondaryColor
