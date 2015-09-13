@@ -112,6 +112,9 @@ Item
         if (initialized && eventTime !== 0)
         {
             energyEventAdded(eventTime, energy, charging, event);
+
+            if (event === "")
+                EnergyLog.cleanup(Globals.MAXIMUM_ENERGY_LOG_DAYS);
         }
     }
 
