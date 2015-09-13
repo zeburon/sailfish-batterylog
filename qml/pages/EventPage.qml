@@ -11,6 +11,7 @@ Page
     // -----------------------------------------------------------------------
 
     property bool pageActive: status === PageStatus.Active
+    property bool initialized: false
 
     // -----------------------------------------------------------------------
 
@@ -22,7 +23,7 @@ Page
     {
         var currentDate = new Date(Date.now());
 
-        var events = logs.getLatestEnergyEvents(Globals.INITIAL_EVENT_PAGE_DAY_COUNT);
+        var events = logs.getLatestEnergyEvents(Globals.EVENT_PAGE_DAY_COUNT);
         for (var idx = 0; idx < events.length; ++idx)
         {
             var time     = events[idx][0];
@@ -31,18 +32,34 @@ Page
             var event    = events[idx][3];
             addItem(time, energy, charging, event);
         }
+
+        initialized = true;
     }
 
     function addItem(time, energy, charging, event)
     {
-        if (event !== "")
-        {
-            itemModel.append({"itemTime": time, "itemEnergy": energy, "itemCharging": charging, "itemEvent": event});
-            if (itemModel.count > Globals.MAX_EVENT_PAGE_ENTRY_COUNT)
-                itemModel.remove(0);
+        // we are only interested in 'real' events
+        if (event === "")
+            return;
 
-            itemListScrollTimer.start();
+        // add new entry to list
+        itemModel.append({"itemTime": time, "itemEnergy": energy, "itemCharging": charging, "itemEvent": event});
+
+        // remove entries that are too old
+        if (initialized)
+        {
+            while (true)
+            {
+                var timeDifferenceInMinutes = (time - itemModel.get(0).itemTime) / 60000;
+                var timeDifferenceInDays = timeDifferenceInMinutes / 60 / 24;
+                if (timeDifferenceInDays > Globals.EVENT_PAGE_DAY_COUNT)
+                    itemModel.remove(0);
+                else
+                    break;
+            }
         }
+
+        itemListScrollTimer.start();
     }
 
     // -----------------------------------------------------------------------
