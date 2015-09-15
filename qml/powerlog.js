@@ -1,5 +1,6 @@
-var lastPowerValues = [];
-var lastCharging    = false;
+var maximumEntryCount = 10;
+var lastPowerValues   = [];
+var lastCharging      = false;
 
 // -----------------------------------------------------------------------
 
@@ -26,40 +27,35 @@ function addEntry(power)
     }
 
     lastPowerValues.push(power);
-    if (lastPowerValues.length >= 20)
+    if (lastPowerValues.length >= maximumEntryCount * 2)
     {
-        lastPowerValues = lastPowerValues.slice(10);
+        lastPowerValues = lastPowerValues.slice(maximumEntryCount);
     }
 }
 
 // -----------------------------------------------------------------------
 
-function getAverage(count)
+function getWeightedAverage(count)
 {
-    if (lastPowerValues.length < 1)
+    count = Math.min(count, lastPowerValues.length);
+    if (count < 1)
         return 0.0;
 
-    var rangeSum = 0;
-    var startIdx = lastPowerValues.length - 1;
-    var endIdx = Math.max(0, startIdx - count - 1);
-    for (var idx = startIdx; idx >= endIdx; --idx)
+    var startIdx = lastPowerValues.length - count;
+    var endIdx = lastPowerValues.length;
+    var valueSum = 0, weightSum = 0;
+    for (var idx = 0; idx < count; ++idx)
     {
-        rangeSum += lastPowerValues[idx];
+        valueSum += lastPowerValues[startIdx + idx] * idx; // latest values are more important
+        weightSum += idx;
     }
-    var rangeCount = Math.max(1, startIdx - endIdx + 1);
-    return Math.round(rangeSum / rangeCount);
+
+    return Math.round(valueSum / weightSum);
 }
 
 // -----------------------------------------------------------------------
 
-function getAverageNow()
+function getAveragePower()
 {
-    return getAverage(2);
-}
-
-// -----------------------------------------------------------------------
-
-function getAverageTrend()
-{
-    return getAverage(10);
+    return getWeightedAverage(maximumEntryCount);
 }

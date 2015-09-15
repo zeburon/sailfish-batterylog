@@ -17,10 +17,6 @@ Item
     property bool active: screenInfo.on
     property bool initialized: false
 
-    property int averagePowerNow
-    property string remainingMinutesNow
-    property string remainingTimeNowShort
-    property string remainingTimeNowLong
 
     property int averagePowerTrend
     property string remainingMinutesTrend
@@ -70,13 +66,7 @@ Item
 
     function updateAveragePower()
     {
-        averagePowerNow = PowerLog.getAverageNow();
-
-        remainingMinutesNow = getRemainingMinutes(averagePowerNow);
-        remainingTimeNowShort = TimeFormat.getShortTimeString(remainingMinutesNow);
-        remainingTimeNowLong = TimeFormat.getLongTimeString(remainingMinutesNow);
-
-        averagePowerTrend = (full ? 0.0 : PowerLog.getAverageTrend());
+        averagePowerTrend = (full ? 0.0 : PowerLog.getAveragePower());
         remainingMinutesTrend = getRemainingMinutes(averagePowerTrend);
         remainingTimeTrendShort = TimeFormat.getShortTimeString(remainingMinutesTrend);
         remainingTimeTrendLong = TimeFormat.getLongTimeString(remainingMinutesTrend);
