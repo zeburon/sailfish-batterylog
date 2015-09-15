@@ -113,7 +113,7 @@ CoverBackground
             width: parent.width
             height: 75
             dayCount: Globals.SMALL_GRAPH_DAY_COUNT
-            currentHighlightSize: 6
+            endSize: 6
             showDividerLabels: false
         }
         Label

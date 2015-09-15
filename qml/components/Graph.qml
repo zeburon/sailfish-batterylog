@@ -10,13 +10,14 @@ Item
     property bool showDividers: true
     property bool showDividerLabels: true
     property bool reachedStart
-    property int currentHighlightSize: 8
-    property int currentX
-    property int currentY
-    property string currentColor
     property real backgroundOpacity: 0.45
     property int lineWidth: 4
     property int energyFullValue: batteryInfo.energyFull
+
+    property int endSize: 8
+    property int endX
+    property int endY
+    property string endColor
 
     property color lineColorChargingActive: "#ffc0cc00"
     property color lineColorChargingInactive: "#cc66a621"
@@ -53,10 +54,10 @@ Item
     {
         id: canvas
 
-        property real xPerMilliSecond: (width - currentHighlightSize) / (dayCount * 24 * 3600 * 1000)
+        property real xPerMilliSecond: (width - endSize / 2) / (dayCount * 24 * 3600 * 1000)
         property int yOffset: lineWidth / 2
         property int energyLineHeight: height - yOffset * 2
-        property int mergeLength: 6
+        property int mergeSegmentLength: 6
 
         function getLineColor(charging, active)
         {
@@ -78,6 +79,7 @@ Item
 
         function drawDividers(context, startTime)
         {
+            context.globalAlpha = 0.3;
             context.beginPath();
             context.lineWidth = 3;
             for (var dividerIdx = 0; dividerIdx <= dayCount; ++dividerIdx)
@@ -98,6 +100,7 @@ Item
 
         function drawDividerLabels(context, startTime)
         {
+            context.globalAlpha = 0.3;
             context.font = "bold 12pt sans-serif";
             context.fillStyle = "white";
             for (var labelIdx = 0; labelIdx <= dayCount; ++labelIdx)
@@ -113,6 +116,26 @@ Item
             }
         }
 
+        function drawEnd(context)
+        {
+            context.globalAlpha = 0.2;
+            context.beginPath();
+
+            var segmentCount = Math.round(height / endSize);
+            segmentCount = segmentCount + segmentCount % 2 + 1;
+            var increment = height / segmentCount;
+            var xStart = width - endSize;
+            var y      = 0;
+            while (y < height)
+            {
+                context.rect(xStart, y, endSize, increment);
+                y += increment * 2;
+            }
+
+            context.fillStyle = endColor;
+            context.fill();
+        }
+
         anchors { fill: parent; margins: 7 }
         onPaint:
         {
@@ -122,13 +145,11 @@ Item
 
             var context = getContext("2d");
             context.reset();
-            currentX = currentY = -1;
+            endX = endY = -1;
 
             // empty graph: no entries found
             if (entries.length < 1)
                 return;
-
-            context.globalAlpha = 0.3;
 
             // day dividers
             if (showDividers)
@@ -137,6 +158,9 @@ Item
             // day labels
             if (showDividerLabels)
                 drawDividerLabels(context, startTime);
+
+            if (dayOffset === 0)
+                drawEnd(context);
 
             // energy line
             context.globalAlpha = 1.0;
@@ -170,9 +194,9 @@ Item
                     // this is the latest entry
                     if (dayOffset === 0 && idx === entries.length - 1)
                     {
-                        currentX = newX;
-                        currentY = newY + yOffset;
-                        currentColor = getLineColor(segmentCharging, segmentActive);
+                        endX = newX;
+                        endY = newY + yOffset;
+                        endColor = getLineColor(segmentCharging, segmentActive);
                     }
                 }
                 // end of current session
@@ -212,7 +236,7 @@ Item
                     segmentLength = 0;
                 }
                 // continue with segment
-                else if (Math.abs(newX - lastX) > mergeLength || Math.abs(newY - lastY) > mergeLength)
+                else if (Math.abs(newX - lastX) > mergeSegmentLength || Math.abs(newY - lastY) > mergeSegmentLength)
                 {
                     context.lineTo(newX, newY);
                     ++segmentLength;
@@ -233,13 +257,13 @@ Item
 
         Rectangle
         {
-            id: currentHighlight
+            id: endHighlight
 
-            visible: currentX > 0
-            anchors { horizontalCenter: parent.left; horizontalCenterOffset: currentX; verticalCenter: parent.top; verticalCenterOffset: currentY }
-            color: currentColor
-            width: currentHighlightSize
-            height: currentHighlightSize
+            visible: endX > 0
+            anchors { horizontalCenter: parent.left; horizontalCenterOffset: endX; verticalCenter: parent.top; verticalCenterOffset: endY }
+            color: endColor
+            width: endSize
+            height: endSize
             radius: width / 2
         }
     }
