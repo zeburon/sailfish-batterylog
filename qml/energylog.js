@@ -1,3 +1,12 @@
+// persistent event-based log. each entry consists of the following values:
+// time: time of occurrence
+// energy: remaining capacity in kWh
+// charging: 0 when discharging, 1 when discharging
+// active: 0 when in standby, 1 when screen is turned on
+// event: type of event, e.g. "Start", "Stop", "Charging", "Discharging", "Full". empty for periodic updates
+
+// -----------------------------------------------------------------------
+
 function getDatabase()
 {
     return LocalStorage.openDatabaseSync("harbour-batterylog", "1.0", "StorageDatabase", 100000);

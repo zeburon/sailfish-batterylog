@@ -1,3 +1,7 @@
+// non-persistent log of the last 10 power values
+
+// -----------------------------------------------------------------------
+
 var maximumEntryCount = 10;
 var lastPowerValues   = [];
 var lastCharging      = false;

@@ -17,12 +17,13 @@ Item
     property bool active: screenInfo.on
     property bool initialized: false
 
-
+    // trend: based on values gathered by PowerLog in the last minute
     property int averagePowerTrend
     property string remainingMinutesTrend
     property string remainingTimeTrendShort
     property string remainingTimeTrendLong
 
+    // prognosis: based on values gathered by EnergyLog in the last 24 hours
     property int averagePowerPrognosis
     property string remainingMinutesPrognosis
     property string remainingTimePrognosisShort
