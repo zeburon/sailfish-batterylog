@@ -33,6 +33,21 @@
     </message>
 </context>
 <context>
+    <name>CoverPage</name>
+    <message>
+        <source>Time left</source>
+        <translation>Restdauer</translation>
+    </message>
+    <message>
+        <source>Remaining</source>
+        <translation>Verbleibend</translation>
+    </message>
+    <message>
+        <source>Average</source>
+        <translation>Durchschnitt</translation>
+    </message>
+</context>
+<context>
     <name>Event</name>
     <message>
         <source>Charging</source>

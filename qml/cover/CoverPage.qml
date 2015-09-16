@@ -84,7 +84,7 @@ CoverBackground
         Label
         {
             width: parent.width
-            text: "Time left"
+            text: qsTr("Time left")
             color: Theme.secondaryColor
             horizontalAlignment: Text.AlignHCenter
             font { family: Theme.fontFamily; pixelSize: Theme.fontSizeMedium }
@@ -119,7 +119,7 @@ CoverBackground
         Label
         {
             width: parent.width
-            text: "Remaining"
+            text: qsTr("Remaining")
             color: Theme.secondaryColor
             horizontalAlignment: Text.AlignHCenter
             font { family: Theme.fontFamily; pixelSize: Theme.fontSizeMedium }
@@ -135,7 +135,7 @@ CoverBackground
         Label
         {
             width: parent.width
-            text: "Average"
+            text: qsTr("Average")
             color: Theme.secondaryColor
             horizontalAlignment: Text.AlignHCenter
             font { family: Theme.fontFamily; pixelSize: Theme.fontSizeMedium }
