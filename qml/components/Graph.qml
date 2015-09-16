@@ -56,8 +56,8 @@ Item
 
         property real xPerMilliSecond: (width - endSize / 2) / (dayCount * 24 * 3600 * 1000)
         property int yOffset: lineWidth / 2
-        property int energyLineHeight: height - yOffset * 2
-        property int mergeSegmentLength: 6
+        property int maximumHeight: height - yOffset * 2
+        property int mergeSegmentDistance: 6
 
         function getLineColor(charging, active)
         {
@@ -159,6 +159,7 @@ Item
             if (showDividerLabels)
                 drawDividerLabels(context, startTime);
 
+            // highlight end of graph
             if (dayOffset === 0)
                 drawEnd(context);
 
@@ -173,7 +174,7 @@ Item
             var lastX, lastY, newX, newY, segmentCharging, segmentActive, segmentLength = 0, sessionLength = 0;
             for (var idx = entries.length - 1; idx >= 0; --idx)
             {
-                var entry = entries[idx];
+                var entry    = entries[idx];
                 var time     = entry[0];
                 var energy   = entry[1];
                 var charging = entry[2];
@@ -182,7 +183,7 @@ Item
 
                 // calculate coordinates of entry
                 newX = Math.round((time - startTime) * xPerMilliSecond);
-                newY = Math.round(energyLineHeight * (1.0 - energy / energyFullValue));
+                newY = Math.round(maximumHeight * (1.0 - energy / energyFullValue));
 
                 // start of a new session
                 if (sessionLength === 0)
@@ -190,8 +191,9 @@ Item
                     context.moveTo(newX + 1, newY);
                     segmentCharging = charging;
                     segmentActive = active;
+                    segmentLength = 0;
 
-                    // this is the latest entry
+                    // this is the latest entry - we use this information to draw the endHighlight item
                     if (dayOffset === 0 && idx === entries.length - 1)
                     {
                         endX = newX;
@@ -199,7 +201,7 @@ Item
                         endColor = getLineColor(segmentCharging, segmentActive);
                     }
                 }
-                // end of current session
+                // end of current session (when the application was started)
                 else if (event === "Start")
                 {
                     context.lineTo(newX, newY);
@@ -208,7 +210,7 @@ Item
                     sessionLength = 0;
                     continue;
                 }
-                // end of current segment - start with a new one
+                // end of current segment - start with a new one (=> switch color)
                 else if (charging !== segmentCharging || active !== segmentActive)
                 {
                     // finish old segment: only visible if length is longer than 1 pixel
@@ -236,11 +238,12 @@ Item
                     segmentLength = 0;
                 }
                 // continue with segment
-                else if (Math.abs(newX - lastX) > mergeSegmentLength || Math.abs(newY - lastY) > mergeSegmentLength)
+                else if (Math.abs(newX - lastX) > mergeSegmentDistance || Math.abs(newY - lastY) > mergeSegmentDistance)
                 {
                     context.lineTo(newX, newY);
                     ++segmentLength;
                 }
+                // nobody seems to be interested in this entry :)
                 else
                 {
                     continue;
