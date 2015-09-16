@@ -10,7 +10,7 @@ Item
 {
     property real power: batteryInfo.current * batteryInfo.voltage / 1000 // [mW]
     property real energy: batteryInfo.energy // [mWh]
-    property int capacity: batteryInfo.capacity
+    property int capacity: batteryInfo.capacity // [0% - 100%]
     property bool charging: batteryInfo.status === "Full" || batteryInfo.status === "Charging"
     property bool full: batteryInfo.status === "Full"
     property string status: batteryInfo.status
@@ -78,6 +78,8 @@ Item
     function updateAverageEnergy()
     {
         averagePowerPrognosis = EnergyLog.getAveragePower(1);
+
+        // switch to averagePowerTrend if averagePowerPrognosis is not available
         if (averagePowerPrognosis < 1 && !charging)
             averagePowerPrognosis = averagePowerTrend;
 
@@ -165,6 +167,7 @@ Item
     }
     Component.onDestruction:
     {
+        // note: this piece code is not called reliably
         addEnergyEntry("Stop");
     }
 

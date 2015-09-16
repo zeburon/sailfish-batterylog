@@ -38,11 +38,13 @@ Canvas
         var h = height;
         var r = Math.round(h / 2.0);
 
+        // main section
         context.beginPath();
         context.rect(r * scaleX, 0.0, w - h * scaleX, h);
         context.fillStyle = color;
         context.fill();
 
+        // left side
         context.save();
         context.scale(scaleX, 1.0);
         context.beginPath();
@@ -52,6 +54,7 @@ Canvas
         context.fill();
         context.restore();
 
+        // right side
         context.save();
         context.scale(scaleX, 1.0);
         context.beginPath();
@@ -69,12 +72,12 @@ Canvas
         var w = (width - r * scaleX * 2 - offset * 2) * percent;
 
         var gradient = context.createLinearGradient(0, 0, 0, height);
-        gradient.addColorStop(0, color);
+        gradient.addColorStop(0.0, color);
         gradient.addColorStop(0.2, Qt.lighter(color, 1.75));
         gradient.addColorStop(0.3, Qt.lighter(color, 1.75));
         gradient.addColorStop(0.4, color);
         gradient.addColorStop(0.6, Qt.darker(color, 1.2));
-        gradient.addColorStop(1, Qt.darker(color, 2));
+        gradient.addColorStop(1.0, Qt.darker(color, 2));
 
         // main section
         context.beginPath();
