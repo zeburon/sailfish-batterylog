@@ -25,14 +25,12 @@ ApplicationWindow
 
     Component.onCompleted:
     {
-        settings.loadValues();
         batteryInfo.update();
         screenInfo.update();
         logs.init();
         eventPage.init();
         mainPage.refreshDrawings();
         coverPage.refreshDrawings();
-        settings.startStoringValueChanges();
         logs.capacityUpdated.connect(mainPage.refreshDrawings);
         logs.capacityUpdated.connect(coverPage.refreshDrawings);
         logs.energyEventAdded.connect(mainPage.refreshDrawings);
@@ -44,10 +42,6 @@ ApplicationWindow
 
     // -----------------------------------------------------------------------
 
-    Settings
-    {
-        id: settings
-    }
     BatteryInfo
     {
         id: batteryInfo

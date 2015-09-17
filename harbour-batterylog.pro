@@ -26,10 +26,8 @@ OTHER_FILES += qml/harbour-batterylog.qml \
     rpm/harbour-batterylog.yaml \
     translations/*.ts \
     harbour-batterylog.desktop \
-    qml/components/Settings.qml \
     qml/globals.js \
     qml/pages/MainPage.qml \
-    qml/settings.js \
     qml/components/Logs.qml \
     qml/components/Battery.qml \
     qml/components/Graph.qml \
