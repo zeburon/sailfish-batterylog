@@ -40,7 +40,12 @@ OTHER_FILES += qml/harbour-batterylog.qml \
     qml/gfx/about.png \
     qml/components/GraphLegendItemLeft.qml \
     qml/components/GraphLegendItemRight.qml \
-    qml/components/GraphLegendCategory.qml
+    qml/components/GraphLegendCategory.qml \
+    qml/pages/SettingsPage.qml \
+    qml/storage.js \
+    qml/components/Settings.qml \
+    qml/components/ColorChooserDialog.qml \
+    qml/components/ColorChooserItem.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line

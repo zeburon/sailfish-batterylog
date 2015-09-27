@@ -25,23 +25,33 @@ ApplicationWindow
 
     Component.onCompleted:
     {
+        settings.loadValues();
         batteryInfo.update();
         screenInfo.update();
         logs.init();
         eventPage.init();
+        settingsPage.init();
         mainPage.refreshDrawings();
         coverPage.refreshDrawings();
+
+        settingsPage.lineColorsModified.connect(mainPage.refreshDrawings);
+        settingsPage.lineColorsModified.connect(coverPage.refreshDrawings);
         logs.capacityUpdated.connect(mainPage.refreshDrawings);
         logs.capacityUpdated.connect(coverPage.refreshDrawings);
         logs.energyEventAdded.connect(mainPage.refreshDrawings);
         logs.energyEventAdded.connect(coverPage.refreshDrawings);
         logs.energyEventAdded.connect(eventPage.addItem);
 
+        settings.startStoringValueChanges();
         initialized = true;
     }
 
     // -----------------------------------------------------------------------
 
+    Settings
+    {
+        id: settings
+    }
     BatteryInfo
     {
         id: batteryInfo
@@ -62,6 +72,10 @@ ApplicationWindow
     EventPage
     {
         id: eventPage
+    }
+    SettingsPage
+    {
+        id: settingsPage
     }
     AboutPage
     {

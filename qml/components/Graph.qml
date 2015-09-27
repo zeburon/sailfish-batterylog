@@ -19,10 +19,10 @@ Item
     property int endY
     property string endColor
 
-    property color lineColorChargingActive: "#ffc0cc00"
-    property color lineColorChargingInactive: "#cc66a621"
-    property color lineColorDischargingActive: "#ffffcc77"
-    property color lineColorDischargingInactive: "#bbaaaaaa"
+    property color lineColorChargingActive: settings.lineColorChargingActive
+    property color lineColorChargingInactive: settings.lineColorChargingInactive
+    property color lineColorDischargingActive: settings.lineColorDischargingActive
+    property color lineColorDischargingInactive: settings.lineColorDischargingInactive
 
     // -----------------------------------------------------------------------
 
@@ -132,7 +132,7 @@ Item
                 y += increment * 2;
             }
 
-            context.fillStyle = endColor;
+            context.fillStyle = getLineColor(logs.charging, logs.active);
             context.fill();
         }
 

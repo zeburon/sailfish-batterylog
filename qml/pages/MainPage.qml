@@ -65,6 +65,14 @@ Page
                     pageStack.push(aboutPage);
                 }
             }
+            MenuItem
+            {
+                text: qsTr("Settings")
+                onClicked:
+                {
+                    pageStack.push(settingsPage);
+                }
+            }
         }
         Column
         {

@@ -33,6 +33,25 @@
     </message>
 </context>
 <context>
+    <name>ColorChooserDialog</name>
+    <message>
+        <source>Red</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Green</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Blue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alpha</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CoverPage</name>
     <message>
         <source>Time left</source>
@@ -135,6 +154,10 @@
         <source>fully charged</source>
         <translation>vollständig aufgeladen</translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SecondPage</name>
@@ -145,6 +168,45 @@
     <message>
         <source>Item</source>
         <translation>Element</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsPage</name>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Storage period</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> days</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Graph Colors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Charging + Active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Charging + Inactive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discharging + Active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discharging + Inactive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset Colors</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -107,7 +107,7 @@ Item
             energyEventAdded(eventTime, energy, charging, event);
 
             if (event === "")
-                EnergyLog.cleanup(Globals.MAXIMUM_ENERGY_LOG_DAYS);
+                EnergyLog.cleanup(settings.energyLogDayCount);
         }
     }
 
