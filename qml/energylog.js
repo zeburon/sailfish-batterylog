@@ -103,7 +103,8 @@ function getLatestEvents(dayCount)
     var lastEvent;
     getDatabase().transaction(function(tx)
     {
-        var result = tx.executeSql("SELECT time,energy,charging,event FROM energy_log WHERE time > ? AND event != '' AND event != 'Stop' ORDER BY time ASC LIMIT 400;", [startTime]);        for(var idx = 0; idx < result.rows.length; idx++)
+        var result = tx.executeSql("SELECT time,energy,charging,event FROM energy_log WHERE time > ? AND event != '' AND event != 'Stop' ORDER BY time ASC LIMIT 400;", [startTime]);
+        for(var idx = 0; idx < result.rows.length; idx++)
         {
             var time = new Date(result.rows.item(idx).time);
             time.setMinutes(time.getMinutes() + currentTime.getTimezoneOffset());
@@ -158,4 +159,40 @@ function getAveragePower(dayCount)
         }
     });
     return averagePower;
+}
+
+// -----------------------------------------------------------------------
+
+function getStoredDayCount()
+{
+    var currentTime = new Date(Date.now());
+    var count = 0.0;
+    getDatabase().transaction(function(tx)
+    {
+        var result = tx.executeSql("SELECT time FROM energy_log ORDER BY time ASC LIMIT 1;");
+        if (result.rows.length === 1)
+        {
+            var time = new Date(result.rows.item(0).time);
+            time.setMinutes(time.getMinutes() + currentTime.getTimezoneOffset());
+
+            count = (currentTime - time) / 1000 / 3600 / 24;
+        }
+    });
+    return count;
+}
+
+// -----------------------------------------------------------------------
+
+function getStoredEventCount()
+{
+    var count = 0;
+    getDatabase().transaction(function(tx)
+    {
+        var result = tx.executeSql("SELECT COUNT(*) AS count FROM energy_log;");
+        if (result.rows.length === 1)
+        {
+            count = result.rows.item(0).count;
+        }
+    });
+    return count;
 }

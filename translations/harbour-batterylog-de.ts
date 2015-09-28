@@ -36,19 +36,19 @@
     <name>ColorChooserDialog</name>
     <message>
         <source>Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Rot</translation>
     </message>
     <message>
         <source>Green</source>
-        <translation type="unfinished"></translation>
+        <translation>Grün</translation>
     </message>
     <message>
         <source>Blue</source>
-        <translation type="unfinished"></translation>
+        <translation>Blau</translation>
     </message>
     <message>
         <source>Alpha</source>
-        <translation type="unfinished"></translation>
+        <translation>Alpha</translation>
     </message>
 </context>
 <context>
@@ -156,7 +156,7 @@
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen</translation>
     </message>
 </context>
 <context>
@@ -174,39 +174,47 @@
     <name>SettingsPage</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen</translation>
     </message>
     <message>
         <source>Storage period</source>
-        <translation type="unfinished"></translation>
+        <translation>Aufzeichnungszeitraum</translation>
     </message>
     <message>
         <source> days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Graph Colors</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Charging + Active</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Charging + Inactive</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Discharging + Active</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Discharging + Inactive</source>
-        <translation type="unfinished"></translation>
+        <translation> Tage</translation>
     </message>
     <message>
         <source>Reset Colors</source>
-        <translation type="unfinished"></translation>
+        <translation>Farben zurücksetzen</translation>
+    </message>
+    <message>
+        <source>%1 events of %2 days stored</source>
+        <translation>%1 Einträge aus %2 Tagen gespeichert</translation>
+    </message>
+    <message>
+        <source>Deleting %1 days...</source>
+        <translation>Lösche %1 Tage...</translation>
+    </message>
+    <message>
+        <source>Charging + on</source>
+        <translation>Laden + eingeschaltet</translation>
+    </message>
+    <message>
+        <source>Charging + standby</source>
+        <translation>Laden + Standby</translation>
+    </message>
+    <message>
+        <source>Discharging + on</source>
+        <translation>Entladen + eingeschaltet</translation>
+    </message>
+    <message>
+        <source>Discharging + standby</source>
+        <translation>Entladen + Standby</translation>
+    </message>
+    <message>
+        <source>Line Colors</source>
+        <translation>Linienfarben</translation>
     </message>
 </context>
 <context>

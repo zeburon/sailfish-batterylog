@@ -107,8 +107,13 @@ Item
             energyEventAdded(eventTime, energy, charging, event);
 
             if (event === "")
-                EnergyLog.cleanup(settings.energyLogDayCount);
+                cleanupEnergyEntries();
         }
+    }
+
+    function cleanupEnergyEntries()
+    {
+        EnergyLog.cleanup(settings.energyLogDayCount);
     }
 
     function getRemainingMinutes(averagePower)
@@ -136,6 +141,16 @@ Item
     function getLatestEnergyEvents(dayCount)
     {
         return EnergyLog.getLatestEvents(dayCount);
+    }
+
+    function getCurrentEnergyEventCount()
+    {
+        return EnergyLog.getStoredEventCount();
+    }
+
+    function getCurrentEnergyDayCount()
+    {
+        return EnergyLog.getStoredDayCount();
     }
 
     // -----------------------------------------------------------------------

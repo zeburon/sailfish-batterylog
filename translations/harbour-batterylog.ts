@@ -185,27 +185,35 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Graph Colors</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Charging + Active</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Charging + Inactive</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Discharging + Active</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Discharging + Inactive</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Reset Colors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 events of %2 days stored</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deleting %1 days...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Charging + on</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Charging + standby</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discharging + on</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Discharging + standby</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Line Colors</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

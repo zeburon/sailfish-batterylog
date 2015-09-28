@@ -10,14 +10,48 @@ Page
 
     // -----------------------------------------------------------------------
 
+    property bool pageActive: status === PageStatus.Active
+    property int currentEventCurrent
+    property real currentDayCount
+
+    // -----------------------------------------------------------------------
+
     signal lineColorsModified()
 
     // -----------------------------------------------------------------------
 
     function init()
     {
+        loadEnergyLogDayCount();
+    }
+
+    function loadEnergyLogDayCount()
+    {
         var energyLogDayCountIdx = Globals.ENERGY_LOG_DAY_COUNTS.indexOf(settings.energyLogDayCount);
         energyLogDayCountComboBox.currentIndex = energyLogDayCountIdx;
+    }
+
+    function saveEnergyLogDayCount(newDayCount)
+    {
+        settings.energyLogDayCount = newDayCount;
+        logs.cleanupEnergyEntries();
+        updateEnergyLogStats();
+    }
+
+    function updateEnergyLogStats()
+    {
+        currentEventCurrent = logs.getCurrentEnergyEventCount();
+        currentDayCount = logs.getCurrentEnergyDayCount();
+    }
+
+    // -----------------------------------------------------------------------
+
+    onPageActiveChanged:
+    {
+        if (pageActive)
+        {
+            updateEnergyLogStats();
+        }
     }
 
     // -----------------------------------------------------------------------
@@ -35,32 +69,57 @@ Page
         }
 
         // energy log day count
-        ComboBox
+        BackgroundItem
         {
-            id: energyLogDayCountComboBox
-
-            label: qsTr("Storage period")
-            menu: ContextMenu
+            ComboBox
             {
-                Repeater
-                {
-                    model: Globals.ENERGY_LOG_DAY_COUNTS.length
+                id: energyLogDayCountComboBox
 
-                    MenuItem
+                label: qsTr("Storage period")
+                menu: ContextMenu
+                {
+                    Repeater
                     {
-                        text: Globals.ENERGY_LOG_DAY_COUNTS[index] + qsTr(" days")
-                        onClicked:
+                        model: Globals.ENERGY_LOG_DAY_COUNTS.length
+
+                        MenuItem
                         {
-                            settings.energyLogDayCount = Globals.ENERGY_LOG_DAY_COUNTS[index];
+                            text: Globals.ENERGY_LOG_DAY_COUNTS[index] + qsTr(" days")
+                            onClicked:
+                            {
+                                var newDayCount = Globals.ENERGY_LOG_DAY_COUNTS[index];
+                                if (newDayCount >= currentDayCount)
+                                    saveEnergyLogDayCount(newDayCount);
+                                else
+                                    remorseItem.execute(energyLogDayCountComboBox, qsTr("Deleting %1 days...").arg((currentDayCount - newDayCount).toFixed(1)), function() { saveEnergyLogDayCount(newDayCount); });
+                            }
                         }
+                    }
+                }
+                RemorseItem
+                {
+                    id: remorseItem
+
+                    onCanceled:
+                    {
+                        loadEnergyLogDayCount();
                     }
                 }
             }
         }
+        Label
+        {
+            id: energyLogInfoLabel
+
+            x: Theme.paddingLarge
+            color: Theme.secondaryColor
+            font { family: Theme.fontFamily; pixelSize: Theme.fontSizeSmall }
+            text: qsTr("%1 events of %2 days stored").arg(currentEventCurrent).arg(currentDayCount.toFixed(1))
+        }
 
         SectionHeader
         {
-            text: qsTr("Graph Colors")
+            text: qsTr("Line Colors")
         }
 
         ColorChooserItem
@@ -68,7 +127,7 @@ Page
             id: lineColorChargingActiveChooser
 
             colorValue: settings.lineColorChargingActive
-            colorLabel: qsTr("Charging + Active")
+            colorLabel: qsTr("Charging + on")
             onColorValueChanged:
             {
                 settings.lineColorChargingActive = colorValue;
@@ -80,7 +139,7 @@ Page
             id: lineColorChargingInactiveChooser
 
             colorValue: settings.lineColorChargingInactive
-            colorLabel: qsTr("Charging + Inactive")
+            colorLabel: qsTr("Charging + standby")
             onColorValueChanged:
             {
                 settings.lineColorChargingInactive = colorValue;
@@ -92,7 +151,7 @@ Page
             id: lineColorDischargingActiveChooser
 
             colorValue: settings.lineColorDischargingActive
-            colorLabel: qsTr("Discharging + Active")
+            colorLabel: qsTr("Discharging + on")
             onColorValueChanged:
             {
                 settings.lineColorDischargingActive = colorValue;
@@ -104,7 +163,7 @@ Page
             id: lineColorDischargingInactiveChooser
 
             colorValue: settings.lineColorDischargingInactive
-            colorLabel: qsTr("Discharging + Inactive")
+            colorLabel: qsTr("Discharging + standby")
             onColorValueChanged:
             {
                 settings.lineColorDischargingInactive = colorValue;
