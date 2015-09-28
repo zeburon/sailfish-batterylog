@@ -56,7 +56,7 @@ CoverBackground
             width: parent.width
             text: batteryInfo.capacity + "%"
             horizontalAlignment: Text.AlignHCenter
-            color: Theme.secondaryHighlightColor
+            color: Theme.highlightColor
             font { family: "Monospace"; pixelSize: Theme.fontSizeExtraLarge }
         }
         Battery
@@ -72,7 +72,7 @@ CoverBackground
         {
             width: parent.width
             text: batteryInfo.status
-            color: Theme.secondaryHighlightColor
+            color: Theme.highlightColor
             horizontalAlignment: Text.AlignHCenter
             font { family: Theme.fontFamily; pixelSize: Theme.fontSizeSmall }
         }
