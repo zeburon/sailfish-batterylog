@@ -12,7 +12,7 @@ Item
     property bool reachedStart
     property real backgroundOpacity: 0.45
     property int lineWidth: 4
-    property int energyFullValue: batteryInfo.energyFull
+    property int energyFullValue: batteryInfo.energyFullDesign
 
     property int endSize: 8
     property int endX
@@ -183,7 +183,7 @@ Item
 
                 // calculate coordinates of entry
                 newX = Math.round((time - startTime) * xPerMilliSecond);
-                newY = Math.round(maximumHeight * (1.0 - energy / energyFullValue));
+                newY = Math.round(Math.max(0.0, maximumHeight * (1.0 - energy / energyFullValue)));
 
                 // start of a new session
                 if (sessionLength === 0)
