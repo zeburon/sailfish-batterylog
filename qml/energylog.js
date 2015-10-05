@@ -7,6 +7,10 @@
 
 // -----------------------------------------------------------------------
 
+var lastTime, lastEnergy, lastCharging, lastActive, lastEvent;
+
+// -----------------------------------------------------------------------
+
 function getDatabase()
 {
     return LocalStorage.openDatabaseSync("harbour-batterylog", "1.0", "StorageDatabase", 100000);
@@ -24,17 +28,6 @@ function init()
 
 // -----------------------------------------------------------------------
 
-function reset()
-{
-    getDatabase().transaction(function(tx)
-    {
-        tx.executeSql("DROP TABLE energy_log");
-    });
-    init();
-}
-
-// -----------------------------------------------------------------------
-
 function cleanup(maximumDays)
 {
     var cleanupTime = new Date(Date.now());
@@ -47,17 +40,42 @@ function cleanup(maximumDays)
 
 // -----------------------------------------------------------------------
 
-function addEntry(energy, charging, active, event)
+function addOrUpdateEntry(energy, charging, active, event)
 {
     var currentTime = new Date(Date.now());
+
+    // same event twice in a row: no need to create a new event, just update previous entry.
+    if (lastEnergy === energy && lastCharging === charging && lastActive === active && lastEvent === event)
+    {
+        getDatabase().transaction(function(tx)
+        {
+            var result = tx.executeSql("UPDATE energy_log SET time = ? WHERE time = ?;", [currentTime, lastTime]);
+            if (result.rowsAffected === 0)
+            {
+                console.log("Failed to update previous energy_log entry.");
+                return 0;
+            }
+        });
+        lastTime = currentTime;
+        return 0;
+    }
+
+    // values have changed: create new entry
     getDatabase().transaction(function(tx)
     {
         var result = tx.executeSql("INSERT INTO energy_log VALUES (?,?,?,?,?);", [currentTime, energy, charging, active, event]);
         if (result.rowsAffected === 0)
         {
+            console.log("Failed to add new energy_log entry.");
             return 0;
         }
     });
+
+    lastTime = currentTime;
+    lastEnergy = energy;
+    lastCharging = charging;
+    lastActive = active;
+    lastEvent = event;
     return currentTime;
 }
 

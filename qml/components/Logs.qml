@@ -45,24 +45,13 @@ Item
     function init()
     {
         PowerLog.init();
-        updateAveragePower();
-        updatePowerTimer.start();
+        addPowerEntryAndRestartTimer();
 
         EnergyLog.init();
-        addEnergyEntry("Start");
-        addEnergyEntry(status);
-        updateAverageEnergy();
-        updateEnergyTimer.start();
+        addEnergyEntryAndRestartTimer("Start");
+        addEnergyEntryAndRestartTimer(status);
 
         initialized = true;
-    }
-
-    function reset()
-    {
-        PowerLog.reset();
-        updateAveragePower();
-        EnergyLog.reset();
-        updateAverageEnergy();
     }
 
     function updateAveragePower()
@@ -94,14 +83,16 @@ Item
         averageEnergyUpdated();
     }
 
-    function addPowerEntry()
+    function addPowerEntryAndRestartTimer()
     {
         PowerLog.addEntry(power);
+        updateAveragePower();
+        updatePowerTimer.start();
     }
 
-    function addEnergyEntry(event)
+    function addEnergyEntryAndRestartTimer(event)
     {
-        var eventTime = EnergyLog.addEntry(energy, charging, active, event);
+        var eventTime = EnergyLog.addOrUpdateEntry(energy, charging, active, event);
         if (initialized && eventTime !== 0)
         {
             energyEventAdded(eventTime, energy, charging, event);
@@ -109,6 +100,8 @@ Item
             if (event === "")
                 cleanupEnergyEntries();
         }
+        updateAverageEnergy();
+        updateEnergyTimer.start();
     }
 
     function cleanupEnergyEntries()
@@ -160,18 +153,14 @@ Item
         if (!initialized)
             return;
 
-        addEnergyEntry(status);
-        updateAverageEnergy();
-        updateEnergyTimer.start();
+        addEnergyEntryAndRestartTimer(status);
     }
     onActiveChanged:
     {
         if (!initialized)
             return;
 
-        addEnergyEntry("");
-        updateAverageEnergy();
-        updateEnergyTimer.start();
+        addEnergyEntryAndRestartTimer("");
     }
     onCapacityChanged:
     {
@@ -183,7 +172,7 @@ Item
     Component.onDestruction:
     {
         // note: this piece code is not called reliably
-        addEnergyEntry("Stop");
+        addEnergyEntryAndRestartTimer("Stop");
     }
 
     // -----------------------------------------------------------------------
@@ -193,12 +182,11 @@ Item
         id: updatePowerTimer
 
         interval: Globals.UPDATE_POWER_INTERVAL * 1000
-        repeat: true
+        repeat: false
         onTriggered: {
             screenInfo.update();
             batteryInfo.update();
-            addPowerEntry();
-            updateAveragePower();
+            addPowerEntryAndRestartTimer();
         }
     }
     Timer
@@ -206,12 +194,14 @@ Item
         id: updateEnergyTimer
 
         interval: Globals.UPDATE_ENERGY_INTERVAL * 1000
-        repeat: true
+        repeat: false
         onTriggered: {
             screenInfo.update();
             batteryInfo.update();
-            addEnergyEntry("");
-            updateAverageEnergy();
+
+            // only manually add new event if updates have not already generated a event
+            if (!running)
+                addEnergyEntryAndRestartTimer("");
         }
     }
 }
