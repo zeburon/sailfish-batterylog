@@ -29,7 +29,7 @@ void ScreenInfo::update()
 
 void ScreenInfo::updateOn()
 {
-    int new_on = readFileAsInteger(BASE_PATH + FILENAME_BRIGHTNESS) > 0;
+    bool new_on = readFileAsInteger(BASE_PATH + FILENAME_BRIGHTNESS) > 0;
     if (new_on != m_on)
     {
         m_on = new_on;
