@@ -179,7 +179,7 @@ Page
         {
             anchors { horizontalCenter: parent.horizontalCenter }
             text: qsTr("Reset Colors")
-            preferredWidth: Theme.buttonWidthLarge
+            width: Theme.buttonWidthLarge
             onClicked:
             {
                 lineColorChargingActiveChooser.colorValue      = Globals.DEFAULT_LINE_COLOR_CHARGING_ACTIVE;
