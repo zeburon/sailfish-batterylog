@@ -146,6 +146,7 @@ Item
             var context = getContext("2d");
             context.reset();
             endX = endY = -1;
+            reachedStart = (dayOffset + dayOffset) > logs.getCurrentEnergyEventCount();
 
             // empty graph: no entries found
             if (entries.length < 1)
@@ -255,7 +256,6 @@ Item
             }
             context.strokeStyle = getLineColor(segmentCharging, segmentActive);
             context.stroke();
-            reachedStart = lastX > 10;
         }
 
         Rectangle
