@@ -94,7 +94,7 @@ Item
                 context.moveTo(dividerX, 0);
                 context.lineTo(dividerX, height);
             }
-            context.strokeStyle = "black";
+            context.strokeStyle = "#111111";
             context.stroke();
         }
 
@@ -148,10 +148,6 @@ Item
             endX = endY = -1;
             reachedStart = (dayOffset + dayCount) > logs.getCurrentEnergyDayCount();
 
-            // empty graph: no entries found
-            if (entries.length < 1)
-                return;
-
             // day dividers
             if (showDividers)
                 drawDividers(context, startTime);
@@ -159,6 +155,10 @@ Item
             // day labels
             if (showDividerLabels)
                 drawDividerLabels(context, startTime);
+
+            // empty graph: no entries found
+            if (entries.length < 1)
+                return;
 
             // highlight end of graph
             if (dayOffset === 0)
