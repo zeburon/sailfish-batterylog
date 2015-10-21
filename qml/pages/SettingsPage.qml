@@ -13,6 +13,7 @@ Page
     property bool pageActive: status === PageStatus.Active
     property int currentEventCurrent
     property real currentDayCount
+    property int buttonWidth: width * 0.8 // switch to Theme.buttonWidthLarge as soon as everybody has switched to SailfishOS 2...
 
     // -----------------------------------------------------------------------
 
@@ -132,7 +133,7 @@ Page
 
                 anchors { horizontalCenter: parent.horizontalCenter }
                 text: qsTr("Clear logs")
-                width: Theme.buttonWidthLarge
+                width: buttonWidth
                 onClicked:
                 {
                     energyLogClearRemorseItem.execute(energyLogClearButton, qsTr("Clearing logs"), function() { clearEnergyLog(); });
@@ -207,7 +208,7 @@ Page
         {
             anchors { horizontalCenter: parent.horizontalCenter }
             text: qsTr("Reset Colors")
-            width: Theme.buttonWidthLarge
+            width: buttonWidth
             onClicked:
             {
                 lineColorChargingActiveChooser.colorValue      = Globals.DEFAULT_LINE_COLOR_CHARGING_ACTIVE;
