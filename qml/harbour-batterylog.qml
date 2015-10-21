@@ -41,6 +41,7 @@ ApplicationWindow
         logs.energyEventAdded.connect(mainPage.refreshDrawings);
         logs.energyEventAdded.connect(coverPage.refreshDrawings);
         logs.energyEventAdded.connect(eventPage.addItem);
+        logs.energyEventsCleared.connect(eventPage.clearItems);
 
         settings.startStoringValueChanges();
         initialized = true;

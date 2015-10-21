@@ -160,17 +160,6 @@
     </message>
 </context>
 <context>
-    <name>SecondPage</name>
-    <message>
-        <source>Nested Page</source>
-        <translation>Unterseite</translation>
-    </message>
-    <message>
-        <source>Item</source>
-        <translation>Element</translation>
-    </message>
-</context>
-<context>
     <name>SettingsPage</name>
     <message>
         <source>Settings</source>
@@ -193,10 +182,6 @@
         <translation>%1 Einträge aus %2 Tagen gespeichert</translation>
     </message>
     <message>
-        <source>Deleting %1 days...</source>
-        <translation>Lösche %1 Tage...</translation>
-    </message>
-    <message>
         <source>Charging + on</source>
         <translation>Laden + eingeschaltet</translation>
     </message>
@@ -215,6 +200,18 @@
     <message>
         <source>Line Colors</source>
         <translation>Linienfarben</translation>
+    </message>
+    <message>
+        <source>Deleting %1 days</source>
+        <translation>Lösche %1 Tage</translation>
+    </message>
+    <message>
+        <source>Clearing logs</source>
+        <translation>Lösche Einträge</translation>
+    </message>
+    <message>
+        <source>Clear logs</source>
+        <translation>Einträge löschen</translation>
     </message>
 </context>
 <context>

@@ -38,6 +38,12 @@ Page
         updateEnergyLogStats();
     }
 
+    function clearEnergyLog()
+    {
+        logs.clearEnergyEntries();
+        updateEnergyLogStats();
+    }
+
     function updateEnergyLogStats()
     {
         currentEventCurrent = logs.getCurrentEnergyEventCount();
@@ -91,14 +97,14 @@ Page
                                 if (newDayCount >= currentDayCount)
                                     saveEnergyLogDayCount(newDayCount);
                                 else
-                                    remorseItem.execute(energyLogDayCountComboBox, qsTr("Deleting %1 days...").arg((currentDayCount - newDayCount).toFixed(1)), function() { saveEnergyLogDayCount(newDayCount); });
+                                    energyLogDayCountRemorseItem.execute(energyLogDayCountComboBox, qsTr("Deleting %1 days").arg((currentDayCount - newDayCount).toFixed(1)), function() { saveEnergyLogDayCount(newDayCount); });
                             }
                         }
                     }
                 }
                 RemorseItem
                 {
-                    id: remorseItem
+                    id: energyLogDayCountRemorseItem
 
                     onCanceled:
                     {
@@ -112,9 +118,31 @@ Page
             id: energyLogInfoLabel
 
             x: Theme.paddingLarge
+            height: Theme.itemSizeExtraSmall
             color: Theme.secondaryColor
             font { family: Theme.fontFamily; pixelSize: Theme.fontSizeSmall }
             text: qsTr("%1 events of %2 days stored").arg(currentEventCurrent).arg(currentDayCount.toFixed(1))
+        }
+
+        BackgroundItem
+        {
+            Button
+            {
+                id: energyLogClearButton
+
+                anchors { horizontalCenter: parent.horizontalCenter }
+                text: qsTr("Clear logs")
+                width: Theme.buttonWidthLarge
+                onClicked:
+                {
+                    energyLogClearRemorseItem.execute(energyLogClearButton, qsTr("Clearing logs"), function() { clearEnergyLog(); });
+                }
+
+                RemorseItem
+                {
+                    id: energyLogClearRemorseItem
+                }
+            }
         }
 
         SectionHeader

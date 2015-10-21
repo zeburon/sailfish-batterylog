@@ -38,6 +38,7 @@ Item
     signal averagePowerUpdated()
     signal averageEnergyUpdated()
     signal energyEventAdded(var time, int energy, int charging, string event)
+    signal energyEventsCleared()
     signal capacityUpdated()
 
     // -----------------------------------------------------------------------
@@ -107,6 +108,15 @@ Item
     function cleanupEnergyEntries()
     {
         EnergyLog.cleanup(settings.energyLogDayCount);
+    }
+
+    function clearEnergyEntries()
+    {
+        EnergyLog.reset();
+        energyEventsCleared();
+
+        addEnergyEntryAndRestartTimer("Start");
+        addEnergyEntryAndRestartTimer(status);
     }
 
     function getRemainingMinutes(averagePower)

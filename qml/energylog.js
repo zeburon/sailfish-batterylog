@@ -40,6 +40,16 @@ function cleanup(maximumDays)
 
 // -----------------------------------------------------------------------
 
+function reset()
+{
+    getDatabase().transaction(function(tx)
+    {
+        var result = tx.executeSql("DELETE FROM energy_log;");
+    });
+}
+
+// -----------------------------------------------------------------------
+
 function addOrUpdateEntry(energy, charging, active, event)
 {
     var currentTime = new Date(Date.now());

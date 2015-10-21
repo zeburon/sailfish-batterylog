@@ -62,6 +62,11 @@ Page
         itemListScrollTimer.start();
     }
 
+    function clearItems()
+    {
+        itemModel.clear();
+    }
+
     // -----------------------------------------------------------------------
 
     allowedOrientations: Orientation.Portrait
