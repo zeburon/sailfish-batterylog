@@ -146,7 +146,7 @@ Item
             var context = getContext("2d");
             context.reset();
             endX = endY = -1;
-            reachedStart = (dayOffset + dayOffset) > logs.getCurrentEnergyEventCount();
+            reachedStart = (dayOffset + dayCount) > logs.getCurrentEnergyDayCount();
 
             // empty graph: no entries found
             if (entries.length < 1)
