@@ -77,19 +77,19 @@
     <name>MainCover</name>
     <message>
         <source>Until full</source>
-        <translation type="unfinished"></translation>
+        <translation>Bis voll</translation>
     </message>
     <message>
         <source>Time left</source>
-        <translation type="unfinished">Restdauer</translation>
+        <translation>Restdauer</translation>
     </message>
     <message>
         <source>Remaining</source>
-        <translation type="unfinished">Verbleibend</translation>
+        <translation>Verbleibend</translation>
     </message>
     <message>
         <source>Average</source>
-        <translation type="unfinished">Durchschnitt</translation>
+        <translation>Durchschnitt</translation>
     </message>
 </context>
 <context>

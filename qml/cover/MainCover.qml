@@ -84,7 +84,13 @@ CoverBackground
         Label
         {
             width: parent.width
-            text: qsTr("Time left")
+            text:
+            {
+                if (logs.charging && !logs.full)
+                    return qsTr("Until full");
+
+                return qsTr("Time left");
+            }
             color: Theme.secondaryColor
             horizontalAlignment: Text.AlignHCenter
             font { family: Theme.fontFamily; pixelSize: Theme.fontSizeMedium }
@@ -92,7 +98,13 @@ CoverBackground
         Label
         {
             width: parent.width
-            text: logs.charging ? logs.remainingTimeTrendShort : logs.remainingTimePrognosisShort
+            text:
+            {
+                if (logs.charging && !logs.full)
+                    return logs.remainingTimeTrendShort;
+
+                return logs.remainingTimePrognosisShort;
+            }
             color: Theme.primaryColor
             horizontalAlignment: Text.AlignHCenter
             font { family: Theme.fontFamily; pixelSize: Theme.fontSizeLarge }
