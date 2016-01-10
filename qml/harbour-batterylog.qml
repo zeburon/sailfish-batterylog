@@ -18,7 +18,7 @@ ApplicationWindow
 
     // -----------------------------------------------------------------------
 
-    cover: coverPage
+    cover: mainCover
     initialPage: mainPage
 
     // -----------------------------------------------------------------------
@@ -32,14 +32,14 @@ ApplicationWindow
         eventPage.init();
         settingsPage.init();
         mainPage.refreshDrawings();
-        coverPage.refreshDrawings();
+        mainCover.refreshDrawings();
 
         settingsPage.lineColorsModified.connect(mainPage.refreshDrawings);
-        settingsPage.lineColorsModified.connect(coverPage.refreshDrawings);
+        settingsPage.lineColorsModified.connect(mainCover.refreshDrawings);
         logs.capacityUpdated.connect(mainPage.refreshDrawings);
-        logs.capacityUpdated.connect(coverPage.refreshDrawings);
+        logs.capacityUpdated.connect(mainCover.refreshDrawings);
         logs.energyEventAdded.connect(mainPage.refreshDrawings);
-        logs.energyEventAdded.connect(coverPage.refreshDrawings);
+        logs.energyEventAdded.connect(mainCover.refreshDrawings);
         logs.energyEventAdded.connect(eventPage.addItem);
         logs.energyEventsCleared.connect(eventPage.clearItems);
 
@@ -83,8 +83,8 @@ ApplicationWindow
         id: aboutPage
     }
 
-    CoverPage
+    MainCover
     {
-        id: coverPage
+        id: mainCover
     }
 }

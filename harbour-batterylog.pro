@@ -20,7 +20,6 @@ SOURCES += src/harbour-batterylog.cpp \
     src/infobase.cpp
 
 OTHER_FILES += qml/harbour-batterylog.qml \
-    qml/cover/CoverPage.qml \
     rpm/harbour-batterylog.changes.in \
     rpm/harbour-batterylog.spec \
     rpm/harbour-batterylog.yaml \
@@ -61,4 +60,7 @@ HEADERS += \
     src/batteryinfo.h \
     src/screeninfo.h \
     src/infobase.h
+
+DISTFILES += \
+    qml/cover/MainCover.qml
 
