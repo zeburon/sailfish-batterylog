@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------
 
 var lastTime, lastEnergy, lastCharging, lastActive, lastEvent;
+var timeoutIntervalInSeconds;
 
 // -----------------------------------------------------------------------
 
@@ -18,8 +19,9 @@ function getDatabase()
 
 // -----------------------------------------------------------------------
 
-function init()
+function init(newTimeoutIntervalInSeconds)
 {
+    timeoutIntervalInSeconds = newTimeoutIntervalInSeconds;
     getDatabase().transaction(function(tx)
     {
         tx.executeSql("CREATE TABLE IF NOT EXISTS energy_log(time DATE PRIMARY KEY, energy BIGINT, charging SMALLINT, active SMALLINT, event TEXT)");
@@ -54,7 +56,7 @@ function addOrUpdateEntry(energy, charging, active, event)
 {
     var currentTime = new Date(Date.now());
 
-    // same event twice in a row: no need to create a new event, just update previous entry.
+    // same event twice in a row: no need to create a new event, just update previous entry
     if (lastEnergy === energy && lastCharging === charging && lastActive === active && lastEvent === event)
     {
         getDatabase().transaction(function(tx)
@@ -70,23 +72,49 @@ function addOrUpdateEntry(energy, charging, active, event)
         return 0;
     }
 
-    // values have changed: create new entry
-    getDatabase().transaction(function(tx)
+    // check if we missed a standby event
+    // our own timer is unable to wake the device - we have to rely on other processes
+    var elapsedSeconds = (currentTime - lastTime) / 1000;
+    if (active && active === lastActive && elapsedSeconds > timeoutIntervalInSeconds)
     {
-        var result = tx.executeSql("INSERT INTO energy_log VALUES (?,?,?,?,?);", [currentTime, energy, charging, active, event]);
-        if (result.rowsAffected === 0)
+        var missedTime = new Date(lastTime);
+        missedTime.setSeconds(lastTime.getSeconds() + timeoutIntervalInSeconds);
+        if (!addEntry(missedTime, lastEnergy, lastCharging, false, lastEvent))
         {
-            console.log("Failed to add new energy_log entry.");
+            console.log("Failed to add missing energy_log entry.");
             return 0;
         }
-    });
+    }
 
-    lastTime = currentTime;
-    lastEnergy = energy;
+    // create new entry
+    if (!addEntry(currentTime, energy, charging, active, event))
+    {
+        console.log("Failed to add new energy_log entry.");
+        return 0;
+    }
+
+    // store values for next call
+    lastTime     = currentTime;
+    lastEnergy   = energy;
     lastCharging = charging;
-    lastActive = active;
-    lastEvent = event;
+    lastActive   = active;
+    lastEvent    = event;
     return currentTime;
+}
+
+// -----------------------------------------------------------------------
+
+function addEntry(time, energy, charging, active, event)
+{
+    getDatabase().transaction(function(tx)
+    {
+        var result = tx.executeSql("INSERT INTO energy_log VALUES (?,?,?,?,?);", [time, energy, charging, active, event]);
+        if (result.rowsAffected === 0)
+        {
+            return false;
+        }
+    });
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -94,9 +122,9 @@ function addOrUpdateEntry(energy, charging, active, event)
 function getLatestEntries(dayCount, dayOffset)
 {
     var currentTime = new Date(Date.now());
-    var startTime = new Date(Date.now());
+    var startTime   = new Date(Date.now());
     startTime.setDate(startTime.getDate() - dayCount - dayOffset);
-    var endTime = new Date(Date.now());
+    var endTime     = new Date(Date.now());
     endTime.setDate(endTime.getDate() - dayOffset);
 
     // fetch latest stored entries
@@ -106,12 +134,12 @@ function getLatestEntries(dayCount, dayOffset)
         var result = tx.executeSql("SELECT time,energy,charging,active,event FROM energy_log WHERE time > ? AND time < ? ORDER BY time ASC;", [startTime, endTime]);
         for(var idx = 0; idx < result.rows.length; idx++)
         {
-            var time = new Date(result.rows.item(idx).time);
+            var time     = new Date(result.rows.item(idx).time);
             time.setMinutes(time.getMinutes() + currentTime.getTimezoneOffset());
-            var energy = result.rows.item(idx).energy;
+            var energy   = result.rows.item(idx).energy;
             var charging = result.rows.item(idx).charging;
-            var active = result.rows.item(idx).active;
-            var event = result.rows.item(idx).event;
+            var active   = result.rows.item(idx).active;
+            var event    = result.rows.item(idx).event;
             entries.push([time, energy, charging, active, event]);
         }
     });
