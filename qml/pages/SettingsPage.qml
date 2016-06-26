@@ -75,6 +75,11 @@ Page
             title: qsTr("Settings")
         }
 
+        SectionHeader
+        {
+            text: qsTr("Storage")
+        }
+
         // energy log day count
         BackgroundItem
         {

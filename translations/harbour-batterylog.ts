@@ -217,6 +217,10 @@
         <source>Clear logs</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Storage</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>timeformat</name>
