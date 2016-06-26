@@ -5,11 +5,22 @@ import "../timeformat.js" as TimeFormat
 
 Item
 {
+    // event information
     property date time
     property int energy
     property bool charging
     property string event
-    property string formattedEvent:
+
+    // information of next event
+    property date endTime
+    property int endEnergy
+    property string endEvent
+
+    property int startCapacity: batteryInfo.valid ? Math.max(0, Math.min(100, Math.round(100.0 * energy / batteryInfo.energyFull))) : 0
+    property int endCapacity: batteryInfo.valid ? Math.max(0, Math.min(100, Math.round(100.0 * endEnergy / batteryInfo.energyFull))) : 0
+    property int capacityChange: batteryInfo.valid ? Math.max(0, Math.min(100, Math.abs(isCurrentEvent ? batteryInfo.capacity - startCapacity : startCapacity - endCapacity))) : 0
+
+    property string formattedEventString:
     {
         switch (event)
         {
@@ -20,21 +31,18 @@ Item
         }
         return event;
     }
-    property int capacity: Math.min(100.0, Math.round(100.0 * energy / batteryInfo.energyFull))
 
-    property date nextTime
-    property int nextEnergy
-    property string nextEvent
-    property int nextCapacity: Math.min(100.0, Math.round(100.0 * nextEnergy / batteryInfo.energyFull))
-    property int capacityChange: Math.abs(isCurrentEvent ? batteryInfo.capacity - capacity : capacity - nextCapacity)
-    property int timeDurationInMinutes: Math.floor((nextTime - time) / 60000)
-    property string timeDurationString: TimeFormat.getLongTimeString(timeDurationInMinutes)
+
+    property int durationInMinutes: Math.floor((endTime - time) / 60000)
+    property string durationString: TimeFormat.getLongTimeString(durationInMinutes)
 
     property bool isStartEvent: event === "Start"
     property bool isFullEvent: event === "Full"
-    property bool isCurrentEvent: nextEnergy === 0
+    property bool isCurrentEvent: endEnergy === 0
 
-    property int capacityWidth: 80
+    readonly property int capacityWidth: 180
+    readonly property int separatorHeight: 15
+    readonly property int rowHeight: 60
 
     // -----------------------------------------------------------------------
 
@@ -42,14 +50,14 @@ Item
     {
         if (isCurrentEvent)
         {
-            nextTime = new Date(Date.now());
+            endTime = new Date(Date.now());
         }
     }
 
     // -----------------------------------------------------------------------
 
     width: parent.width
-    height: isStartEvent ? 15 : 60
+    height: isStartEvent ? separatorHeight : rowHeight
 
     // -----------------------------------------------------------------------
 
@@ -58,7 +66,7 @@ Item
         id: startGradient
 
         anchors { left: parent.left; right: parent.right; verticalCenter: parent.verticalCenter }
-        height: 15
+        height: separatorHeight
         visible: isStartEvent
         gradient: Gradient {
             GradientStop { position: 0.0; color: "#00ffffff" }
@@ -81,7 +89,7 @@ Item
             anchors { left: parent.left; top: parent.top }
             visible: !isFullEvent
             width: capacityWidth
-            text: (charging ? "+" : "-") + capacityChange + "%"
+            text: (capacityChange !== 0 ? (charging ? "+" : "-") : "") + capacityChange + "%"
             horizontalAlignment: Text.AlignRight
             verticalAlignment: Text.AlignVCenter
             color: charging ? "green" : "red"
@@ -92,7 +100,7 @@ Item
             id: eventLabel
 
             anchors { left: capacityChangeLabel.right; leftMargin: 5; verticalCenter: capacityChangeLabel.verticalCenter }
-            text: formattedEvent
+            text: formattedEventString
             color: isCurrentEvent ? Theme.highlightColor : Theme.primaryColor
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
@@ -103,7 +111,7 @@ Item
             id: timeDurationLabel
 
             anchors { right: parent.right; verticalCenter: capacityChangeLabel.verticalCenter }
-            text: timeDurationString
+            text: durationString
             color: isCurrentEvent ? Theme.secondaryHighlightColor : Theme.secondaryColor
             horizontalAlignment: Text.AlignRight
             verticalAlignment: Text.AlignVCenter
@@ -116,7 +124,7 @@ Item
 
             anchors { left: parent.left; bottom: parent.bottom }
             width: capacityWidth
-            text: capacity + "%"
+            text: startCapacity + "%"
             opacity: 0.75
             horizontalAlignment: Text.AlignRight
             verticalAlignment: Text.AlignVCenter

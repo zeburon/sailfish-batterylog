@@ -12,6 +12,7 @@ class BatteryInfo : public QObject, public InfoBase
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool valid READ isValid NOTIFY signalValidChanged)
     Q_PROPERTY(int capacity READ getCapacity NOTIFY signalCapacityChanged)
     Q_PROPERTY(int current READ getCurrent NOTIFY signalCurrentChanged)
     Q_PROPERTY(int voltage READ getVoltage NOTIFY signalVoltageChanged)
@@ -27,6 +28,7 @@ public:
 
     Q_INVOKABLE void update();
 
+    bool isValid() const { return m_valid; }
     int getCapacity() const { return m_capacity; }
     int getCurrent() const { return m_current; }
     int getVoltage() const { return m_voltage; }
@@ -37,6 +39,7 @@ public:
     const QString &getHealth() const { return m_health; }
 
 signals:
+    void signalValidChanged();
     void signalCapacityChanged();
     void signalCurrentChanged();
     void signalVoltageChanged();
@@ -56,6 +59,8 @@ private:
     static const QString FILENAME_ENERGY_FULL_DESIGN;
     static const QString FILENAME_STATUS;
     static const QString FILENAME_HEALTH;
+    static const QString UNKNOWN_STATUS;
+    static const QString UNKNOWN_HEALTH;
 
     void updateCapacity();
     void updateCurrent();
@@ -63,7 +68,9 @@ private:
     void updateEnergy();
     void updateStatus();
     void updateHealth();
+    void updateValidity();
 
+    bool m_valid;
     int m_capacity;           // 0 - 100 %
     int m_current;            // [mA]
     int m_voltage;            // [mV]

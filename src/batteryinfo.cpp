@@ -11,11 +11,13 @@ const QString BatteryInfo::FILENAME_ENERGY_FULL        = "energy_full";
 const QString BatteryInfo::FILENAME_ENERGY_FULL_DESIGN = "energy_full_design";
 const QString BatteryInfo::FILENAME_STATUS             = "status";
 const QString BatteryInfo::FILENAME_HEALTH             = "health";
+const QString BatteryInfo::UNKNOWN_STATUS              = "Unknown";
+const QString BatteryInfo::UNKNOWN_HEALTH              = "Unknown";
 
 // -----------------------------------------------------------------------
 
 BatteryInfo::BatteryInfo(QObject *parent) :
-    QObject(parent), m_capacity(0), m_current(0), m_voltage(0), m_energy(0), m_energy_full(0), m_energy_full_design(0)
+    QObject(parent), m_valid(false), m_capacity(0), m_current(0), m_voltage(0), m_energy(0), m_energy_full(0), m_energy_full_design(0)
 {
 }
 
@@ -35,6 +37,7 @@ void BatteryInfo::update()
     updateEnergy();
     updateStatus();
     updateHealth();
+    updateValidity();
 }
 
 // -----------------------------------------------------------------------
@@ -104,6 +107,9 @@ void BatteryInfo::updateEnergy()
 void BatteryInfo::updateStatus()
 {
     QString new_status = readFileAsString(BASE_PATH + FILENAME_STATUS);
+    if (new_status.isEmpty())
+        new_status = UNKNOWN_STATUS;
+
     if (new_status != m_status)
     {
         m_status = new_status;
@@ -116,9 +122,31 @@ void BatteryInfo::updateStatus()
 void BatteryInfo::updateHealth()
 {
     QString new_health = readFileAsString(BASE_PATH + FILENAME_HEALTH);
-    if (new_health != m_status)
+    if (new_health.isEmpty())
+        new_health = UNKNOWN_HEALTH;
+
+    if (new_health != m_health)
     {
         m_health = new_health;
         emit signalHealthChanged();
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void BatteryInfo::updateValidity()
+{
+    bool new_valid =
+            m_status != UNKNOWN_STATUS &&
+            m_health != UNKNOWN_HEALTH &&
+            m_capacity > 0 &&
+            m_energy > 0 &&
+            m_energy_full > 0 &&
+            m_energy_full_design > 0;
+
+    if (new_valid != m_valid)
+    {
+        m_valid = new_valid;
+        emit signalValidChanged();
     }
 }

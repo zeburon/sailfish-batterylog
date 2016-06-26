@@ -116,9 +116,9 @@ Page
                 charging: itemCharging
                 event: itemEvent
 
-                nextTime: index + 1 < itemModel.count ? itemModel.get(index + 1).itemTime : new Date(Date.now())
-                nextEnergy: index + 1 < itemModel.count ? itemModel.get(index + 1).itemEnergy : 0
-                nextEvent: index + 1 < itemModel.count ? itemModel.get(index + 1).itemEvent : ""
+                endTime: index + 1 < itemModel.count ? itemModel.get(index + 1).itemTime : new Date(Date.now())
+                endEnergy: index + 1 < itemModel.count ? itemModel.get(index + 1).itemEnergy : 0
+                endEvent: index + 1 < itemModel.count ? itemModel.get(index + 1).itemEvent : ""
 
                 Component.onCompleted:
                 {
