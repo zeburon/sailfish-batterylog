@@ -54,7 +54,7 @@ Item
     {
         id: canvas
 
-        property real xPerMilliSecond: (width - endSize / 2) / (dayCount * 24 * 3600 * 1000)
+        property real widthPerMillisecond: (width - endSize / 2.0) / (dayCount * 24.0 * 3600.0 * 1000.0)
         property int yOffset: lineWidth / 2
         property int maximumHeight: height - yOffset * 2
         property int mergeSegmentDistance: 6
@@ -90,7 +90,7 @@ Item
                 dividerTime.setMinutes(0);
                 dividerTime.setSeconds(0);
 
-                var dividerX = (dividerTime - startTime) * xPerMilliSecond;
+                var dividerX = (dividerTime - startTime) * widthPerMillisecond;
                 context.moveTo(dividerX, 0);
                 context.lineTo(dividerX, height);
             }
@@ -111,7 +111,7 @@ Item
                 labelTime.setMinutes(0);
                 labelTime.setSeconds(0);
 
-                var labelX = (labelTime - startTime) * xPerMilliSecond;
+                var labelX = (labelTime - startTime) * widthPerMillisecond;
                 context.fillText(Qt.formatDate(labelTime, "dd.MM"), labelX + 4, height);
             }
         }
@@ -122,10 +122,10 @@ Item
             context.beginPath();
 
             var segmentCount = Math.round(height / endSize);
-            segmentCount = segmentCount + segmentCount % 2 + 1;
-            var increment = height / segmentCount;
-            var xStart = width - endSize;
-            var y      = 0;
+            segmentCount    += segmentCount % 2 + 1;
+            var increment    = height / segmentCount;
+            var xStart       = width - endSize;
+            var y            = 0;
             while (y < height)
             {
                 context.rect(xStart, y, endSize, increment);
@@ -183,7 +183,7 @@ Item
                 var event    = entry[4];
 
                 // calculate coordinates of entry
-                newX = Math.round((time - startTime) * xPerMilliSecond);
+                newX = Math.round((time - startTime) * widthPerMillisecond);
                 newY = Math.round(Math.max(0.0, maximumHeight * (1.0 - energy / energyFullValue)));
 
                 // start of a new session
@@ -197,8 +197,8 @@ Item
                     // this is the latest entry - we use this information to draw the endHighlight item
                     if (dayOffset === 0 && idx === entries.length - 1)
                     {
-                        endX = newX;
-                        endY = newY + yOffset;
+                        endX     = newX;
+                        endY     = newY + yOffset;
                         endColor = getLineColor(segmentCharging, segmentActive);
                     }
                 }

@@ -223,10 +223,25 @@ Page
 
                 width: parent.width
                 height: 150
-                dayCount: Globals.LARGE_GRAPH_DAY_COUNT
+                dayCount: settings.largeGraphDayCount
+
+                MouseArea {
+                    anchors { fill: parent; leftMargin: moveLeftButton.width + 4; rightMargin: moveRightButton.width + 4 }
+                    onClicked: {
+                        var idx = Globals.LARGE_GRAPH_DAY_COUNTS.indexOf(settings.largeGraphDayCount);
+                        var newDayCount = Globals.LARGE_GRAPH_DAY_COUNTS[(idx + 1) % Globals.LARGE_GRAPH_DAY_COUNTS.length];
+                        if (newDayCount > settings.energyLogDayCount)
+                            newDayCount = Globals.LARGE_GRAPH_DAY_COUNTS[0];
+
+                        settings.largeGraphDayCount = newDayCount;
+                        graph.refresh();
+                    }
+                }
 
                 IconButton
                 {
+                    id: moveLeftButton
+
                     anchors { right: parent.right; verticalCenter: parent.verticalCenter }
                     icon.source: "image://theme/icon-l-right"
                     visible: graph.dayOffset > 0
@@ -239,6 +254,8 @@ Page
 
                 IconButton
                 {
+                    id: moveRightButton
+
                     anchors { left: parent.left; verticalCenter: parent.verticalCenter }
                     icon.source: "image://theme/icon-l-left"
                     visible: !graph.reachedStart

@@ -1,7 +1,9 @@
 var VERSION                                 = "1.2.2";
 var UPDATE_POWER_INTERVAL                   = 5;
 var UPDATE_ENERGY_INTERVAL                  = 600;
-var LARGE_GRAPH_DAY_COUNT                   = 5;
+var LARGE_GRAPH_DAY_COUNTS                  = [1, 2, 5, 10];
+var DEFAULT_LARGE_GRAPH_DAY_COUNT           = 5;
+var LARGE_GRAPH_DAY_COUNT_LONGTERM          = 10;
 var SMALL_GRAPH_DAY_COUNT                   = 2;
 var EVENT_PAGE_DAY_COUNT                    = 30;
 var ENERGY_LOG_DAY_COUNTS                   = [5, 10, 15, 20, 30, 50, 100];

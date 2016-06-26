@@ -7,6 +7,7 @@ import "../globals.js" as Globals
 QtObject
 {
     property int energyLogDayCount: Globals.DEFAULT_ENERGY_LOG_DAY_COUNT;                         property string energyLogDayCountKey: "energyLogDayCount"
+    property int largeGraphDayCount: Globals.DEFAULT_LARGE_GRAPH_DAY_COUNT;                       property string largeGraphDayCountKey: "largeGraphDayCount"
     property color lineColorChargingActive: Globals.DEFAULT_LINE_COLOR_CHARGING_ACTIVE;           property string lineColorChargingActiveKey: "lineColorChargingActive"
     property color lineColorChargingInactive: Globals.DEFAULT_LINE_COLOR_CHARGING_INACTIVE;       property string lineColorChargingInactiveKey: "lineColorChargingInactive"
     property color lineColorDischargingActive: Globals.DEFAULT_LINE_COLOR_DISCHARGING_ACTIVE;     property string lineColorDischargingActiveKey: "lineColorDischargingActive"
@@ -22,6 +23,11 @@ QtObject
         var storedEnergyLogDayCount = Storage.getValue(energyLogDayCountKey);
         if (storedEnergyLogDayCount)
             energyLogDayCount = storedEnergyLogDayCount;
+
+        // load largeGraphDayCount
+        var storedLargeGraphDayCount = Storage.getValue(largeGraphDayCountKey);
+        if (storedLargeGraphDayCount)
+            largeGraphDayCount = storedLargeGraphDayCount;
 
         // load lineColorChargingActive
         var storedLineColorChargingActive = Storage.getValue(lineColorChargingActiveKey);
@@ -42,7 +48,6 @@ QtObject
         var storedLineColorDischargingInactive = Storage.getValue(lineColorDischargingInactiveKey);
         if (storedLineColorDischargingInactive)
             lineColorDischargingInactive = storedLineColorDischargingInactive;
-
     }
 
     // -----------------------------------------------------------------------
@@ -57,6 +62,10 @@ QtObject
     onEnergyLogDayCountChanged:
     {
         Storage.setValue(energyLogDayCountKey, energyLogDayCount);
+    }
+    onLargeGraphDayCountChanged:
+    {
+        Storage.setValue(largeGraphDayCountKey, largeGraphDayCount);
     }
     onLineColorChargingActiveChanged:
     {
