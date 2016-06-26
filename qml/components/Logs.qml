@@ -48,7 +48,7 @@ Item
         PowerLog.init();
         addPowerEntryAndRestartTimer();
 
-        EnergyLog.init(Globals.UPDATE_ENERGY_INTERVAL * 2);
+        EnergyLog.init(Globals.UPDATE_ENERGY_INTERVAL * 1.5);
         addEnergyEntryAndRestartTimer("Start");
         addEnergyEntryAndRestartTimer(status);
 
