@@ -1,4 +1,5 @@
-// non-persistent log of the last 10 power values
+// non-persistent log of the last 10 power values (currently one value every 5 seconds)
+// is automatically reset when switching between charging and discharging
 
 // -----------------------------------------------------------------------
 

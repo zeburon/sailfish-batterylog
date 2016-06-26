@@ -1,3 +1,8 @@
+// persistent application settings
+// start saving value changes as soon as init process is completed
+
+// -----------------------------------------------------------------------
+
 var finishedLoading = false;
 
 // -----------------------------------------------------------------------

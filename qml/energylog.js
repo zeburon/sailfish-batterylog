@@ -151,7 +151,7 @@ function getLatestEntries(dayCount, dayOffset)
 function getLatestEvents(dayCount)
 {
     var currentTime = new Date(Date.now());
-    var startTime = new Date(Date.now());
+    var startTime   = new Date(Date.now());
     startTime.setDate(startTime.getDate() - dayCount);
 
     // fetch latest stored entries
@@ -162,11 +162,11 @@ function getLatestEvents(dayCount)
         var result = tx.executeSql("SELECT time,energy,charging,event FROM energy_log WHERE time > ? AND event != '' AND event != 'Stop' ORDER BY time ASC LIMIT 400;", [startTime]);
         for(var idx = 0; idx < result.rows.length; idx++)
         {
-            var time = new Date(result.rows.item(idx).time);
+            var time     = new Date(result.rows.item(idx).time);
             time.setMinutes(time.getMinutes() + currentTime.getTimezoneOffset());
-            var energy = result.rows.item(idx).energy;
+            var energy   = result.rows.item(idx).energy;
             var charging = result.rows.item(idx).charging;
-            var event = result.rows.item(idx).event;
+            var event    = result.rows.item(idx).event;
             if (event !== lastEvent)
             {
                 entries.push([time, energy, charging, event]);
@@ -192,21 +192,22 @@ function getAveragePower(dayCount)
         var result = tx.executeSql("SELECT time,energy,event FROM energy_log WHERE time > ? and charging = ? ORDER BY time ASC LIMIT 1000;", [startTime, false]);
         if (result.rows.length > 1)
         {
-            var sum = 0, duration = 0, lastEnergy = result.rows.item(0).energy, lastTime = new Date(result.rows.item(0).time), lastEvent = result.rows.item(0).event;
+            var sum = 0, duration = 0;
+            var previousEnergy = result.rows.item(0).energy, previousTime = new Date(result.rows.item(0).time), previousEvent = result.rows.item(0).event;
             for(var idx = 1; idx < result.rows.length; idx++)
             {
-                var time = new Date(result.rows.item(idx).time);
+                var time   = new Date(result.rows.item(idx).time);
                 var energy = result.rows.item(idx).energy;
-                var event = result.rows.item(idx).event;
-                if (energy <= lastEnergy && lastEvent !== "Stop")
+                var event  = result.rows.item(idx).event;
+                if (energy <= previousEnergy && previousEvent !== "Stop")
                 {
-                    sum += lastEnergy - energy;
-                    duration += (time - lastTime);
+                    sum += previousEnergy - energy;
+                    duration += (time - previousTime);
                 }
 
-                lastTime = time;
-                lastEnergy = energy;
-                lastEvent = event;
+                previousTime   = time;
+                previousEnergy = energy;
+                previousEvent  = event;
             }
             if (sum > 0)
             {
@@ -222,33 +223,32 @@ function getAveragePower(dayCount)
 function getStoredDayCount()
 {
     var currentTime = new Date(Date.now());
-    var count = 0.0;
+    var dayCount = 0.0;
     getDatabase().transaction(function(tx)
     {
         var result = tx.executeSql("SELECT time FROM energy_log ORDER BY time ASC LIMIT 1;");
         if (result.rows.length === 1)
         {
-            var time = new Date(result.rows.item(0).time);
-            time.setMinutes(time.getMinutes() + currentTime.getTimezoneOffset());
-
-            count = (currentTime - time) / 1000 / 3600 / 24;
+            var firstTime = new Date(result.rows.item(0).time);
+            firstTime.setMinutes(firstTime.getMinutes() + currentTime.getTimezoneOffset());
+            dayCount      = (currentTime - firstTime) / 1000 / 3600 / 24;
         }
     });
-    return count;
+    return dayCount;
 }
 
 // -----------------------------------------------------------------------
 
 function getStoredEventCount()
 {
-    var count = 0;
+    var eventCount = 0;
     getDatabase().transaction(function(tx)
     {
         var result = tx.executeSql("SELECT COUNT(*) AS count FROM energy_log;");
         if (result.rows.length === 1)
         {
-            count = result.rows.item(0).count;
+            eventCount = result.rows.item(0).count;
         }
     });
-    return count;
+    return eventCount;
 }

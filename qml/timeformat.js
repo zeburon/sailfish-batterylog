@@ -1,3 +1,7 @@
+// helper functions for generating time strings
+
+// -----------------------------------------------------------------------
+
 function getLongTimeString(minutes)
 {
     if (isNaN(minutes))
