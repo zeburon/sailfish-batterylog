@@ -56,8 +56,22 @@ function addOrUpdateEntry(energy, charging, active, event)
 {
     var currentTime = new Date(Date.now());
 
+    // check if we missed a standby event
+    // our own timer is unable to wake the device - we have to rely on other processes
+    // if nobody wakes the device - the log will show a very long 'active' event instead of a long 'standby' event
+    var elapsedSeconds = (currentTime - lastTime) / 1000;
+    if (active && active === lastActive && elapsedSeconds > timeoutIntervalInSeconds)
+    {
+        var missedTime = new Date(lastTime);
+        missedTime.setSeconds(lastTime.getSeconds() + timeoutIntervalInSeconds);
+        if (!addEntry(missedTime, lastEnergy, lastCharging, false, lastEvent))
+        {
+            console.log("Failed to add missing energy_log entry.");
+            return 0;
+        }
+    }
     // same event twice in a row: no need to create a new event, just update previous entry
-    if (lastEnergy === energy && lastCharging === charging && lastActive === active && lastEvent === event)
+    else if (lastEnergy === energy && lastCharging === charging && lastActive === active && lastEvent === event)
     {
         getDatabase().transaction(function(tx)
         {
@@ -70,20 +84,6 @@ function addOrUpdateEntry(energy, charging, active, event)
         });
         lastTime = currentTime;
         return 0;
-    }
-
-    // check if we missed a standby event
-    // our own timer is unable to wake the device - we have to rely on other processes
-    var elapsedSeconds = (currentTime - lastTime) / 1000;
-    if (active && active === lastActive && elapsedSeconds > timeoutIntervalInSeconds)
-    {
-        var missedTime = new Date(lastTime);
-        missedTime.setSeconds(lastTime.getSeconds() + timeoutIntervalInSeconds);
-        if (!addEntry(missedTime, lastEnergy, lastCharging, false, lastEvent))
-        {
-            console.log("Failed to add missing energy_log entry.");
-            return 0;
-        }
     }
 
     // create new entry
