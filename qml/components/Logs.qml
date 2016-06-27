@@ -8,6 +8,9 @@ import "../timeformat.js" as TimeFormat
 
 Item
 {
+    property bool initialized: false
+    property bool energyLogWorking: true
+
     property real power: batteryInfo.current * batteryInfo.voltage / 1000 // [mW]
     property real energy: batteryInfo.energy // [mWh]
     property int capacity: batteryInfo.capacity // [0% - 100%]
@@ -15,7 +18,6 @@ Item
     property bool full: batteryInfo.status === "Full"
     property string status: batteryInfo.status
     property bool active: screenInfo.on
-    property bool initialized: false
 
     // trend: based on values gathered by PowerLog in the last minute
     property int averagePowerTrend
@@ -100,7 +102,14 @@ Item
 
             if (event === "")
                 cleanupEnergyEntries();
+
+            energyLogWorking = true;
         }
+        else if (initialized && eventTime === 0)
+        {
+            energyLogWorking = false;
+        }
+
         updateAverageEnergy();
         updateEnergyTimer.start();
     }

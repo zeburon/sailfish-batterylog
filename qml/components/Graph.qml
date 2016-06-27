@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import Sailfish.Silica 1.0
 
 import "../globals.js" as Globals
 
@@ -13,6 +14,7 @@ Item
     property real backgroundOpacity: 0.45
     property int lineWidth: 4
     property int energyFullValue: batteryInfo.energyFullDesign
+    property bool energyLogWorking: true
 
     property int endSize: 8
     property int endX
@@ -269,5 +271,19 @@ Item
             height: endSize
             radius: width / 2
         }
+    }
+
+    Label
+    {
+        id: malfunctionLabel
+
+        anchors { fill: parent }
+        visible: !energyLogWorking
+        text: qsTr("Malfunction Detected")
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        color: "red"
+        font { family: "Monospace"; pixelSize: Theme.fontSizeMedium }
+        scale: Math.min(1.0, (width * 0.9) / contentWidth)
     }
 }

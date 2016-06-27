@@ -74,6 +74,13 @@
     </message>
 </context>
 <context>
+    <name>Graph</name>
+    <message>
+        <source>Malfunction Detected</source>
+        <translation>Störung erkannt</translation>
+    </message>
+</context>
+<context>
     <name>MainCover</name>
     <message>
         <source>Until full</source>
