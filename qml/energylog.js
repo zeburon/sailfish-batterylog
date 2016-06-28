@@ -60,7 +60,7 @@ function addOrUpdateEntry(energy, charging, active, event)
     // our own timer is unable to wake the device - we have to rely on other processes
     // if nobody wakes the device - the log will show a very long 'active' event instead of a long 'standby' event
     var elapsedSeconds = (currentTime - lastTime) / 1000;
-    if (active && active === lastActive && elapsedSeconds > timeoutIntervalInSeconds)
+    if (active && event === lastEvent && elapsedSeconds > timeoutIntervalInSeconds)
     {
         var missedTime = new Date(lastTime);
         missedTime.setSeconds(lastTime.getSeconds() + timeoutIntervalInSeconds);
