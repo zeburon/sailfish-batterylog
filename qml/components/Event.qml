@@ -40,7 +40,7 @@ Item
     property bool isFullEvent: event === "Full"
     property bool isCurrentEvent: endEnergy === 0
 
-    readonly property int capacityWidth: 180
+    readonly property int capacityWidth: 80
     readonly property int separatorHeight: 15
     readonly property int rowHeight: 60
 
