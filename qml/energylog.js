@@ -127,23 +127,75 @@ function getLatestEntries(dayCount, dayOffset)
     var endTime     = new Date(Date.now());
     endTime.setDate(endTime.getDate() - dayOffset);
 
-    // fetch latest stored entries
+    // fetch stored entries in given range
     var entries = [];
     getDatabase().transaction(function(tx)
     {
         var result = tx.executeSql("SELECT time,energy,charging,active,event FROM energy_log WHERE time > ? AND time < ? ORDER BY time ASC;", [startTime, endTime]);
         for(var idx = 0; idx < result.rows.length; idx++)
         {
-            var time     = new Date(result.rows.item(idx).time);
-            time.setMinutes(time.getMinutes() + currentTime.getTimezoneOffset());
-            var energy   = result.rows.item(idx).energy;
-            var charging = result.rows.item(idx).charging;
-            var active   = result.rows.item(idx).active;
-            var event    = result.rows.item(idx).event;
-            entries.push([time, energy, charging, active, event]);
+            entries.push(convertItemToEntry(result.rows.item(idx), currentTime));
         }
     });
+
+    // if we have found some entries: calculate entries at start + end border
+    if (entries.length > 1)
+    {
+        // add event AFTER end
+        var endEntry     = entries[entries.length - 1];
+        var endEntryTime = endEntry[0];
+        var endEnergy    = endEntry[1];
+        var endEvent     = endEntry[4];
+        if (endEvent !== "Stop")
+        {
+            getDatabase().transaction(function(tx)
+            {
+                var result = tx.executeSql("SELECT time,energy,charging,active,event FROM energy_log WHERE time > ? ORDER BY time ASC LIMIT 1;", [endEntryTime]);
+                if (result.rows.length === 1)
+                {
+                    var entry = convertItemToEntry(result.rows.item(0), currentTime);
+                    var s = (endTime - endEntryTime) / (entry[0] - endEntryTime);
+                    entry[1] = endEnergy * (1 - s) + entry[1] * s;;
+                    entry[0] = new Date(endTime);
+                    entries.push(entry);
+                }
+            });
+        }
+
+        // add event BEFORE start
+        var startEntry     = entries[0];
+        var startEntryTime = startEntry[0];
+        var startEnergy    = startEntry[1];
+        var startEvent     = startEntry[4];
+        if (startEntry !== "Start")
+        {
+            getDatabase().transaction(function(tx)
+            {
+                var result = tx.executeSql("SELECT time,energy,charging,active,event FROM energy_log WHERE time < ? ORDER BY time DESC LIMIT 1;", [startEntryTime]);
+                if (result.rows.length === 1)
+                {
+                    var entry = convertItemToEntry(result.rows.item(0), currentTime);
+                    var s = (startTime - startEntryTime) / (entry[0] - startEntryTime);
+                    entry[1] = startEnergy * (1 - s) + entry[1] * s;
+                    entry[0] = new Date(startTime);
+                    entries.unshift(entry);
+                }
+            });
+        }
+    }
     return entries;
+}
+
+function convertItemToEntry(item, currentTime)
+{
+    var time     = new Date(item.time);
+    time.setMinutes(time.getMinutes() + currentTime.getTimezoneOffset());
+    var energy   = item.energy;
+    var charging = item.charging;
+    var active   = item.active;
+    var event    = item.event;
+
+    return [time, energy, charging, active, event];
 }
 
 // -----------------------------------------------------------------------
