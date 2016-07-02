@@ -7,7 +7,7 @@ function getLongTimeString(minutes)
     if (isNaN(minutes))
         minutes = 0;
 
-    if (minutes > 60 * 24 * 31)
+    if (minutes < 1 || minutes > 60 * 24 * 31)
         return "?";
 
     if (minutes <= 60)

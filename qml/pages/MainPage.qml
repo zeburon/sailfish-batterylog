@@ -143,7 +143,12 @@ Page
                     if (logs.full)
                         return qsTr("fully charged");
                     else if (logs.charging)
-                        return logs.remainingTimeTrendLong;
+                    {
+                        if (logs.remainingMinutesTrend > 0)
+                            return logs.remainingTimeTrendLong;
+                        else
+                            return "";
+                    }
                     else if (logs.averagePowerPrognosis > 0)
                         return logs.remainingTimePrognosisLong;
                     else
@@ -163,7 +168,12 @@ Page
                     if (logs.full)
                         return "";
                     else if (logs.charging)
-                        return qsTr("until full");
+                    {
+                        if (logs.remainingMinutesTrend > 0)
+                            return qsTr("until full");
+                        else
+                            return qsTr("calculating...");
+                    }
                     else
                         return qsTr("until empty");
                 }

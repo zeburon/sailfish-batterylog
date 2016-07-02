@@ -169,6 +169,10 @@
         <source>Settings</source>
         <translation>Einstellungen</translation>
     </message>
+    <message>
+        <source>calculating...</source>
+        <translation>berechne...</translation>
+    </message>
 </context>
 <context>
     <name>SettingsPage</name>
