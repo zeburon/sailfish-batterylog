@@ -175,8 +175,9 @@ Item
             context.translate(0, lineWidth / 2);
 
             var lastX, lastY, newX, newY, segmentCharging, segmentActive, segmentLength = 0, sessionLength = 0;
-            for (var idx = entries.length - 1; idx >= 0; --idx)
+            for (var idx = 0; idx < entries.length; ++idx)
             {
+                // fetch entry values
                 var entry    = entries[idx];
                 var time     = entry[0];
                 var energy   = entry[1];
@@ -191,21 +192,13 @@ Item
                 // start of a new session
                 if (sessionLength === 0)
                 {
-                    context.moveTo(newX + 1, newY);
+                    context.moveTo(newX, newY);
                     segmentCharging = charging;
-                    segmentActive = active;
-                    segmentLength = 0;
-
-                    // this is the latest entry - we use this information to draw the endHighlight item
-                    if (dayOffset === 0 && idx === entries.length - 1)
-                    {
-                        endX     = newX;
-                        endY     = newY + yOffset;
-                        endColor = getLineColor(segmentCharging, segmentActive);
-                    }
+                    segmentActive   = active;
+                    segmentLength   = 0;
                 }
-                // end of current session (when the application was started)
-                else if (event === "Start")
+                // end of session (== when the application was stopped)
+                else if (event === "Stop")
                 {
                     context.lineTo(newX, newY);
                     context.strokeStyle = getLineColor(segmentCharging, segmentActive);
@@ -237,8 +230,8 @@ Item
                     context.beginPath();
                     context.moveTo(newX, newY);
                     segmentCharging = charging;
-                    segmentActive = active;
-                    segmentLength = 0;
+                    segmentActive   = active;
+                    segmentLength   = 0;
                 }
                 // continue with segment
                 else if (Math.abs(newX - lastX) > mergeSegmentDistance || Math.abs(newY - lastY) > mergeSegmentDistance)
@@ -256,8 +249,18 @@ Item
                 lastX = newX;
                 lastY = newY;
             }
+
+            // finish drawing current segment
             context.strokeStyle = getLineColor(segmentCharging, segmentActive);
             context.stroke();
+
+            // store values if this is the latest entry - used by endHighlight item
+            if (dayOffset === 0)
+            {
+                endX     = newX;
+                endY     = newY + yOffset;
+                endColor = getLineColor(segmentCharging, segmentActive);
+            }
         }
 
         Rectangle
