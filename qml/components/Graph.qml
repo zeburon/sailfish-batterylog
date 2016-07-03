@@ -81,10 +81,14 @@ Item
 
         function drawDividers(context, startTime)
         {
+            var count = dayCount;
+            if (dayOffset > 0)
+                --count;
+
             context.globalAlpha = 0.3;
             context.beginPath();
             context.lineWidth = 3;
-            for (var dividerIdx = 0; dividerIdx <= dayCount; ++dividerIdx)
+            for (var dividerIdx = 0; dividerIdx < count; ++dividerIdx)
             {
                 var dividerTime = new Date(Date.now());
                 dividerTime.setDate(dividerTime.getDate() - dayOffset - dividerIdx);
@@ -102,10 +106,15 @@ Item
 
         function drawDividerLabels(context, startTime)
         {
+            var count = dayCount;
+            if (dayOffset === 0)
+                ++count;
+
             context.globalAlpha = 0.3;
             context.font = "bold 12pt sans-serif";
             context.fillStyle = "white";
-            for (var labelIdx = 0; labelIdx <= dayCount; ++labelIdx)
+
+            for (var labelIdx = 0; labelIdx < count; ++labelIdx)
             {
                 var labelTime = new Date(Date.now());
                 labelTime.setDate(labelTime.getDate() - dayOffset - labelIdx);
@@ -144,6 +153,13 @@ Item
             var entries = logs.getLatestEnergyEntries(dayCount, dayOffset);
             var startTime = new Date(Date.now());
             startTime.setDate(startTime.getDate() - dayOffset - dayCount);
+
+            if (dayOffset > 0)
+            {
+                startTime.setHours(23);
+                startTime.setMinutes(59);
+                startTime.setSeconds(59);
+            }
 
             var context = getContext("2d");
             context.reset();
