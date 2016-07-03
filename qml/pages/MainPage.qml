@@ -235,9 +235,11 @@ Page
                 height: 150
                 dayCount: settings.largeGraphDayCount
 
-                MouseArea {
-                    anchors { fill: parent; leftMargin: moveLeftButton.width + 4; rightMargin: moveRightButton.width + 4 }
-                    onClicked: {
+                MouseArea
+                {
+                    anchors { fill: parent; leftMargin: moveForwardsButton.width + 4; rightMargin: moveBackwardsButton.width + 4 }
+                    onClicked:
+                    {
                         var idx = Globals.LARGE_GRAPH_DAY_COUNTS.indexOf(settings.largeGraphDayCount);
                         var newDayCount = Globals.LARGE_GRAPH_DAY_COUNTS[(idx + 1) % Globals.LARGE_GRAPH_DAY_COUNTS.length];
                         if (newDayCount > settings.energyLogDayCount)
@@ -245,12 +247,16 @@ Page
 
                         settings.largeGraphDayCount = newDayCount;
                         graph.refresh();
+
+                        // update info label
+                        graphInfoLabel.text = qsTr("Displaying %1 day(s)").arg(newDayCount);
+                        graphInfoTimer.restart();
                     }
                 }
 
                 IconButton
                 {
-                    id: moveLeftButton
+                    id: moveForwardsButton
 
                     anchors { right: parent.right; verticalCenter: parent.verticalCenter }
                     icon.source: "image://theme/icon-l-right"
@@ -259,12 +265,20 @@ Page
                     {
                         --graph.dayOffset;
                         graph.refresh();
+
+                        // update info label
+                        if (graph.dayOffset === 0)
+                            graphInfoLabel.text = qsTr("Starting now");
+                        else
+                            graphInfoLabel.text = qsTr("Starting %1 day(s) ago").arg(graph.dayOffset);
+
+                        graphInfoTimer.restart();
                     }
                 }
 
                 IconButton
                 {
-                    id: moveRightButton
+                    id: moveBackwardsButton
 
                     anchors { left: parent.left; verticalCenter: parent.verticalCenter }
                     icon.source: "image://theme/icon-l-left"
@@ -273,7 +287,34 @@ Page
                     {
                         ++graph.dayOffset;
                         graph.refresh();
+
+                        // update info label
+                        graphInfoLabel.text = qsTr("Starting %1 day(s) ago").arg(graph.dayOffset);
+                        graphInfoTimer.restart();
                     }
+                }
+
+                Label
+                {
+                    id: graphInfoLabel
+
+                    anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.top }
+                    color: Theme.secondaryColor
+                    horizontalAlignment: Text.AlignHCenter
+                    font { family: Theme.fontFamily; pixelSize: Theme.fontSizeTiny }
+                    opacity: graphInfoTimer.running ? 1 : 0
+
+                    Behavior on opacity
+                    {
+                        NumberAnimation { easing.type: Easing.InOutQuart; duration: 200 }
+                    }
+                }
+                Timer
+                {
+                    id: graphInfoTimer
+
+                    repeat: false
+                    interval: 2000
                 }
             }
             Row

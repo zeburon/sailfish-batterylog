@@ -173,6 +173,18 @@
         <source>calculating...</source>
         <translation>berechne...</translation>
     </message>
+    <message>
+        <source>Displaying %1 day(s)</source>
+        <translation>Zeige %1 Tag(e)</translation>
+    </message>
+    <message>
+        <source>Starting now</source>
+        <translation>Beginne ab jetzt</translation>
+    </message>
+    <message>
+        <source>Starting %1 day(s) ago</source>
+        <translation>Beginne vor %1 Tag(en)</translation>
+    </message>
 </context>
 <context>
     <name>SettingsPage</name>

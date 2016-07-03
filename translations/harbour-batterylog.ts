@@ -173,6 +173,18 @@
         <source>calculating...</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Displaying %1 day(s)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Starting now</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Starting %1 day(s) ago</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>SettingsPage</name>
