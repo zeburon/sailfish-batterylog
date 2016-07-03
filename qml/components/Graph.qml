@@ -153,7 +153,6 @@ Item
             var entries = logs.getLatestEnergyEntries(dayCount, dayOffset);
             var startTime = new Date(Date.now());
             startTime.setDate(startTime.getDate() - dayOffset - dayCount);
-
             if (dayOffset > 0)
             {
                 startTime.setHours(23);
@@ -206,7 +205,7 @@ Item
                 newY = Math.round(Math.max(0.0, maximumHeight * (1.0 - energy / energyFullValue)));
 
                 // start of a new session
-                if (sessionLength === 0)
+                if (sessionLength === 0 || event === "Start")
                 {
                     context.moveTo(newX, newY);
                     segmentCharging = charging;

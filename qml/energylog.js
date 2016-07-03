@@ -124,8 +124,21 @@ function getLatestEntries(dayCount, dayOffset)
     var currentTime = new Date(Date.now());
     var startTime   = new Date(Date.now());
     startTime.setDate(startTime.getDate() - dayCount - dayOffset);
+    // if offset is specified: show whole day and ignore current time
+    if (dayOffset !== 0)
+    {
+        startTime.setHours(0);
+        startTime.setMinutes(0);
+        startTime.setSeconds(0);
+    }
     var endTime     = new Date(Date.now());
     endTime.setDate(endTime.getDate() - dayOffset);
+    if (dayOffset !== 0)
+    {
+        endTime.setHours(23);
+        endTime.setMinutes(59);
+        endTime.setSeconds(59);
+    }
 
     // fetch stored entries in given range
     var entries = [];
