@@ -151,8 +151,10 @@ Page
                     }
                     else if (logs.averagePowerPrognosis > 0)
                         return logs.remainingTimePrognosisLong;
-                    else
+                    else if (logs.remainingMinutesTrend > 0)
                         return logs.remainingTimeTrendLong;
+                    else
+                        return "";
                 }
                 color: Theme.primaryColor
                 horizontalAlignment: Text.AlignHCenter
@@ -167,15 +169,15 @@ Page
                 {
                     if (logs.full)
                         return "";
-                    else if (logs.charging)
+
+                    if (logs.remainingMinutesTrend > 0)
                     {
-                        if (logs.remainingMinutesTrend > 0)
+                        if (logs.charging)
                             return qsTr("until full");
                         else
-                            return qsTr("calculating...");
+                            return qsTr("until empty");
                     }
-                    else
-                        return qsTr("until empty");
+                    return qsTr("calculating...");
                 }
                 color: Theme.secondaryColor
                 horizontalAlignment: Text.AlignHCenter
