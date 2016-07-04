@@ -46,6 +46,11 @@ ApplicationWindow
         settings.startStoringValueChanges();
         initialized = true;
     }
+    onActiveChanged:
+    {
+        if (active)
+            mainPage.refreshDrawings();
+    }
 
     // -----------------------------------------------------------------------
 
