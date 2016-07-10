@@ -5,7 +5,7 @@ Label
 {
     property string categoryLabel
 
-    width: contentWidth + 12
+    width: contentWidth + Theme.paddingMedium
     text: categoryLabel
     color: Theme.primaryColor
     horizontalAlignment: Text.AlignHCenter

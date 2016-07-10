@@ -14,7 +14,7 @@ Page
     {
         id: column
 
-        spacing: 5
+        spacing: Theme.paddingMedium
         width: parent.width
 
         Item

@@ -202,7 +202,8 @@ Item
 
         interval: Globals.UPDATE_POWER_INTERVAL * 1000
         repeat: false
-        onTriggered: {
+        onTriggered:
+        {
             screenInfo.update();
             batteryInfo.update();
             addPowerEntryAndRestartTimer();
@@ -214,7 +215,8 @@ Item
 
         interval: Globals.UPDATE_ENERGY_INTERVAL * 1000
         repeat: false
-        onTriggered: {
+        onTriggered:
+        {
             screenInfo.update();
             batteryInfo.update();
 

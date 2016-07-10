@@ -11,6 +11,9 @@ Page
     // -----------------------------------------------------------------------
 
     property bool pageActive: status === PageStatus.Active
+    property int batteryHeight: 130
+    property int batteryCapacityColumnWidth: 150
+    property int graphHeight: 150
 
     // -----------------------------------------------------------------------
 
@@ -88,11 +91,13 @@ Page
             Row
             {
                 width: parent.width
-                height: 130
+                height: batteryHeight
 
                 Column
                 {
-                    width: 150
+                    id: batteryCapacityColumn
+
+                    width: batteryCapacityColumnWidth
                     height: parent.height
 
                     Label
@@ -120,7 +125,7 @@ Page
                 {
                     id: battery
 
-                    width: parent.width - 150
+                    width: parent.width - batteryCapacityColumn.width
                     height: parent.height
                     capacity: batteryInfo.capacity
                     charging: logs.charging
@@ -234,7 +239,7 @@ Page
                 id: graph
 
                 width: parent.width
-                height: 150
+                height: graphHeight
                 dayCount: settings.largeGraphDayCount
 
                 MouseArea
