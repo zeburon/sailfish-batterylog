@@ -1,6 +1,8 @@
 Battery Log for Sailfish OS
 ===========================
 
+<img src="qml/gfx/about.png"/>
+
 Graphical log showing the average battery consumption.
 
 Inspired by SailfishOS application Hunger Meter created by Michal Hrušecký.
