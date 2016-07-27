@@ -12,8 +12,6 @@ CoverBackground
 
     property bool coverActive: status === Cover.Active
     property bool showOverview: true
-    property int batteryHeight: 50
-    property int graphHeight: 75
 
     // -----------------------------------------------------------------------
 
@@ -66,7 +64,7 @@ CoverBackground
             id: battery
 
             width: parent.width
-            height: batteryHeight
+            height: Theme.fontSizeExtraLarge
             capacity: batteryInfo.capacity
             charging: logs.charging
         }
@@ -125,7 +123,7 @@ CoverBackground
             id: graph
 
             width: parent.width
-            height: graphHeight
+            height: Theme.fontSizeExtraLarge * 1.5
             dayCount: Globals.SMALL_GRAPH_DAY_COUNT
             endSize: 6
             showDividerLabels: false
