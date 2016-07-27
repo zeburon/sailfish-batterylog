@@ -43,7 +43,7 @@ Page
             return;
 
         // add new entry to list
-        itemModel.append({"itemTime": time, "itemEnergy": energy, "itemCharging": charging, "itemEvent": event});
+        itemModel.insert(0, {"itemTime": time, "itemEnergy": energy, "itemCharging": charging, "itemEvent": event});
 
         // remove entries that are too old
         if (initialized)
@@ -53,13 +53,13 @@ Page
                 var timeDifferenceInMinutes = (time - itemModel.get(0).itemTime) / 60000;
                 var timeDifferenceInDays = timeDifferenceInMinutes / 60 / 24;
                 if (timeDifferenceInDays > Globals.EVENT_PAGE_DAY_COUNT)
-                    itemModel.remove(0);
+                    itemModel.remove(itemModel.count - 1);
                 else
                     break;
             }
         }
 
-        itemListScrollTimer.start();
+        delayedScrollToTopTimer.start();
     }
 
     function clearItems()
@@ -74,13 +74,7 @@ Page
     {
         if (pageActive)
         {
-            itemList.positionViewAtEnd();
-            updateEventDuration();
-            updateDurationTimer.start();
-        }
-        else
-        {
-            updateDurationTimer.stop();
+            itemList.scrollToTop();
         }
     }
 
@@ -102,13 +96,12 @@ Page
             title: qsTr("Event Log")
             anchors { left: parent.left; right: parent.right; top: parent.top }
         }
-        ListView
+        SilicaListView
         {
             id: itemList
 
             anchors { left: parent.left; right: parent.right; top: header.bottom; bottom: parent.bottom }
             model: itemModel
-            verticalLayoutDirection: ListView.BottomToTop
             clip: true
             delegate: Event {
                 time: itemTime
@@ -116,9 +109,9 @@ Page
                 charging: itemCharging
                 event: itemEvent
 
-                endTime: index + 1 < itemModel.count ? itemModel.get(index + 1).itemTime : new Date(Date.now())
-                endEnergy: index + 1 < itemModel.count ? itemModel.get(index + 1).itemEnergy : 0
-                endEvent: index + 1 < itemModel.count ? itemModel.get(index + 1).itemEvent : ""
+                endTime: index > 0 ? itemModel.get(index - 1).itemTime : new Date(Date.now())
+                endEnergy: index > 0 ? itemModel.get(index - 1).itemEnergy : 0
+                endEvent: index > 0 ? itemModel.get(index - 1).itemEvent : ""
 
                 Component.onCompleted:
                 {
@@ -132,9 +125,6 @@ Page
             add: Transition {
                 NumberAnimation { easing.type: Easing.OutExpo; properties: "opacity"; from: 0; to: 1; duration: 400 }
             }
-            addDisplaced: Transition {
-                NumberAnimation { easing.type: Easing.OutExpo; properties: "y"; duration: 400 }
-            }
             displaced: Transition {
                 NumberAnimation { properties: "opacity"; to: 1; duration: 400 }
             }
@@ -143,13 +133,13 @@ Page
         }
         Timer
         {
-            id: itemListScrollTimer
+            id: delayedScrollToTopTimer
 
             interval: 500
             repeat: false
             onTriggered:
             {
-                itemList.positionViewAtEnd();
+                itemList.scrollToTop();
             }
         }
     }
