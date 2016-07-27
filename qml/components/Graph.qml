@@ -60,6 +60,7 @@ Item
         property int yOffset: lineWidth / 2
         property int maximumHeight: height - yOffset * 2
         property int mergeSegmentDistance: 6
+        property int splitSegmentDistance: widthPerMillisecond * 1000 * 7200 // 2 hours
 
         function getLineColor(charging, active)
         {
@@ -248,16 +249,30 @@ Item
                     segmentActive   = active;
                     segmentLength   = 0;
                 }
-                // continue with segment
-                else if (Math.abs(newX - lastX) > mergeSegmentDistance || Math.abs(newY - lastY) > mergeSegmentDistance)
-                {
-                    context.lineTo(newX, newY);
-                    ++segmentLength;
-                }
-                // nobody seems to be interested in this entry :)
                 else
                 {
-                    continue;
+                    var dx = Math.abs(newX - lastX);
+                    var dy = Math.abs(newY - lastY);
+
+                    // split entries that are too far apart
+                    if (dx > splitSegmentDistance && dy > mergeSegmentDistance)
+                    {
+                        context.moveTo(newX, newY);
+                        segmentCharging = charging;
+                        segmentActive   = active;
+                        segmentLength   = 0;
+                    }
+                    // continue with segment
+                    else if (dx > mergeSegmentDistance || dy > mergeSegmentDistance)
+                    {
+                        context.lineTo(newX, newY);
+                        ++segmentLength;
+                    }
+                    // nobody seems to be interested in this entry :)
+                    else
+                    {
+                        continue;
+                    }
                 }
 
                 ++sessionLength;
