@@ -13,8 +13,8 @@ public:
     virtual ~InfoBase();
 
 protected:
-    QString readFileAsString(const QString &filename) const;
-    int readFileAsInteger(const QString &filename) const;
+    bool readFileAsString(const QString &filename, QString &output) const;
+    bool readFileAsInteger(const QString &filename, int &output) const;
 
 };
 

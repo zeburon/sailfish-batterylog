@@ -50,15 +50,24 @@ signals:
     void signalHealthChanged();
 
 private:
-    static const QString BASE_PATH;
-    static const QString FILENAME_CAPACITY;
-    static const QString FILENAME_CURRENT;
-    static const QString FILENAME_VOLTAGE;
-    static const QString FILENAME_ENERGY;
-    static const QString FILENAME_ENERGY_FULL;
-    static const QString FILENAME_ENERGY_FULL_DESIGN;
-    static const QString FILENAME_STATUS;
-    static const QString FILENAME_HEALTH;
+    static const QString BASE_PATH_SYSFS;
+    static const QString FILENAME_SYSFS_CAPACITY;
+    static const QString FILENAME_SYSFS_CURRENT;
+    static const QString FILENAME_SYSFS_VOLTAGE;
+    static const QString FILENAME_SYSFS_ENERGY;
+    static const QString FILENAME_SYSFS_ENERGY_FULL;
+    static const QString FILENAME_SYSFS_ENERGY_FULL_DESIGN;
+    static const QString FILENAME_SYSFS_STATUS;
+    static const QString FILENAME_SYSFS_HEALTH;
+
+    static const QString BASE_PATH_STATEFS;
+    static const QString FILENAME_STATEFS_CAPACITY;
+    static const QString FILENAME_STATEFS_CURRENT;
+    static const QString FILENAME_STATEFS_VOLTAGE;
+    static const QString FILENAME_STATEFS_ENERGY;
+    static const QString FILENAME_STATEFS_ENERGY_FULL;
+    static const QString FILENAME_STATEFS_STATUS;
+
     static const QString UNKNOWN_STATUS;
     static const QString UNKNOWN_HEALTH;
 

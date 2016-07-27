@@ -16,25 +16,29 @@ InfoBase::~InfoBase()
 
 // -----------------------------------------------------------------------
 
-QString InfoBase::readFileAsString(const QString &filename) const
+bool InfoBase::readFileAsString(const QString &filename, QString &output) const
 {
     QFile file(filename);
     if (!file.open(QIODevice::ReadOnly))
-        return QString();
+        return false;
 
-    return file.readAll().trimmed();
+    output = file.readAll().trimmed();
+    return !output.isEmpty();
 }
 
 // -----------------------------------------------------------------------
 
-int InfoBase::readFileAsInteger(const QString &filename) const
+bool InfoBase::readFileAsInteger(const QString &filename, int &output) const
 {
-    QString string_data = readFileAsString(filename);
+    QString string_data;
+    if (!readFileAsString(filename, string_data))
+        return false;
 
     bool ok = false;
     int value = string_data.toInt(&ok);
     if (!ok)
-        return 0;
+        return false;
 
-    return value;
+    output = value;
+    return true;
 }

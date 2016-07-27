@@ -26,8 +26,11 @@ signals:
     void signalOnChanged();
 
 private:
-    static const QString BASE_PATH;
-    static const QString FILENAME_BRIGHTNESS;
+    static const QString BASE_PATH_SYSFS;
+    static const QString FILENAME_SYSFS_BRIGHTNESS;
+
+    static const QString BASE_PATH_STATEFS;
+    static const QString FILENAME_STATEFS_BLANKED;
 
     void updateOn();
 
