@@ -34,15 +34,15 @@ Item
 
 
     property int durationInMinutes: Math.floor((endTime - time) / 60000)
-    property string durationString: TimeFormat.getLongTimeString(durationInMinutes)
+    property string durationString: durationInMinutes > 0 ? TimeFormat.getLongTimeString(durationInMinutes) : "-"
 
     property bool isStartEvent: event === "Start"
     property bool isFullEvent: event === "Full"
     property bool isCurrentEvent: endEnergy === 0
 
-    readonly property int capacityWidth: 80
-    readonly property int separatorHeight: 15
-    readonly property int rowHeight: 60
+    readonly property int capacityWidth: parent.width / 6
+    readonly property int rowHeight: Theme.fontSizeExtraLarge * 1.25
+    readonly property int separatorHeight: rowHeight / 4
 
     // -----------------------------------------------------------------------
 
@@ -79,7 +79,8 @@ Item
     {
         id: eventInfo
 
-        anchors { fill: parent }
+        anchors { left: parent.left; leftMargin: Theme.paddingMedium; right: parent.right; rightMargin: Theme.paddingMedium }
+        height: parent.height
         visible: !isStartEvent
 
         Label

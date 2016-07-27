@@ -11,9 +11,6 @@ Page
     // -----------------------------------------------------------------------
 
     property bool pageActive: status === PageStatus.Active
-    property int batteryHeight: 130
-    property int batteryCapacityColumnWidth: 150
-    property int graphHeight: 150
 
     // -----------------------------------------------------------------------
 
@@ -90,18 +87,21 @@ Page
             }
             Row
             {
-                width: parent.width
-                height: batteryHeight
+                x: Theme.paddingMedium
+                width: parent.width - x * 2
+                height: Theme.fontSizeExtraLarge * 3
 
                 Column
                 {
                     id: batteryCapacityColumn
 
-                    width: batteryCapacityColumnWidth
+                    width: parent.width / 3
                     height: parent.height
 
                     Label
                     {
+                        id: batteryCapacityLabel
+
                         width: parent.width
                         height: parent.height * 0.6
                         text: batteryInfo.capacity + "%"
@@ -135,7 +135,7 @@ Page
             Item
             {
                 width: 1
-                height: Theme.paddingLarge
+                height: Theme.paddingMedium
             }
 
             Label
@@ -231,15 +231,16 @@ Page
             Item
             {
                 width: 1
-                height: Theme.paddingLarge
+                height: Theme.paddingMedium
             }
 
             Graph
             {
                 id: graph
 
-                width: parent.width
-                height: graphHeight
+                x: Theme.paddingMedium
+                width: parent.width - x * 2
+                height: Theme.fontSizeExtraLarge * 3
                 dayCount: settings.largeGraphDayCount
 
                 MouseArea
@@ -309,7 +310,7 @@ Page
                     color: Theme.secondaryColor
                     horizontalAlignment: Text.AlignHCenter
                     font { family: Theme.fontFamily; pixelSize: Theme.fontSizeTiny }
-                    opacity: graphInfoTimer.running ? 1 : 0
+                    opacity: graphInfoTimer.running ? 0.75 : 0
 
                     Behavior on opacity
                     {
@@ -324,24 +325,25 @@ Page
                     interval: 2000
                 }
             }
-            Row
+            Item
             {
                 id: graphLegendRow
 
                 width: parent.width
-                height: 10
-                opacity: 0.75
+                height: Theme.paddingMedium
+                opacity: 0.65
 
                 Item
                 {
                     id: graphLegendDischarging
 
-                    width: parent.width / 2
-                    height: parent.height
+                    width: parent.width / 2.5
+                    height: parent.height * 0.8
+                    anchors { right: parent.horizontalCenter; verticalCenter: parent.verticalCenter }
 
                     GraphLegendItemRight
                     {
-                        anchors { left: parent.left; right: dischargingLabel.left; verticalCenter: parent.verticalCenter}
+                        anchors { left: parent.left; right: dischargingLabel.left; verticalCenter: parent.verticalCenter }
                         height: parent.height
                         itemColor: graph.lineColorDischargingActive
                         itemLabel: qsTr("on")
@@ -356,7 +358,7 @@ Page
                     }
                     GraphLegendItemLeft
                     {
-                        anchors { left: dischargingLabel.right; right: parent.right; verticalCenter: parent.verticalCenter}
+                        anchors { left: dischargingLabel.right; right: parent.right; verticalCenter: parent.verticalCenter }
                         height: parent.height
                         itemColor: graph.lineColorDischargingInactive
                         itemLabel: qsTr("standby")
@@ -366,8 +368,9 @@ Page
                 {
                     id: graphLegendCharging
 
-                    width: parent.width / 2
-                    height: parent.height
+                    width: parent.width / 2.5
+                    height: parent.height * 0.8
+                    anchors { left: parent.horizontalCenter; verticalCenter: parent.verticalCenter }
 
                     GraphLegendItemRight
                     {
