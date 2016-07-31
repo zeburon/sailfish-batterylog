@@ -1,4 +1,4 @@
-var VERSION                                 = "1.3";
+var VERSION                                 = "1.3.1";
 var UPDATE_POWER_INTERVAL                   = 5;
 var UPDATE_ENERGY_INTERVAL                  = 600;
 var LARGE_GRAPH_DAY_COUNTS                  = [1, 2, 5, 10];
