@@ -16,8 +16,8 @@ const QString BatteryInfo::BASE_PATH_STATEFS                 = "/run/state/names
 const QString BatteryInfo::FILENAME_STATEFS_CAPACITY         = "ChargePercentage";
 const QString BatteryInfo::FILENAME_STATEFS_CURRENT          = "Current";
 const QString BatteryInfo::FILENAME_STATEFS_VOLTAGE          = "Voltage";
-const QString BatteryInfo::FILENAME_STATEFS_ENERGY           = "energy_now";
-const QString BatteryInfo::FILENAME_STATEFS_ENERGY_FULL      = "energy_full";
+const QString BatteryInfo::FILENAME_STATEFS_ENERGY           = "Energy";
+const QString BatteryInfo::FILENAME_STATEFS_ENERGY_FULL      = "EnergyFull";
 const QString BatteryInfo::FILENAME_STATEFS_STATUS           = "State";
 
 const QString BatteryInfo::UNKNOWN_STATUS                    = "Unknown";
