@@ -86,13 +86,41 @@ Item
             if (dayOffset > 0)
                 --count;
 
+            // horizontal dividers
+            context.globalAlpha = 0.2;
+            context.lineWidth = 3;
+
+            // 25%
+            var dividerY = height * 1.0 / 4.0;
+            context.beginPath();
+            context.moveTo(0, dividerY);
+            context.lineTo(width, dividerY);
+            context.strokeStyle = "#114411";
+            context.stroke();
+
+            // 50%
+            dividerY = height * 2.0 / 4.0;
+            context.beginPath();
+            context.moveTo(0, dividerY);
+            context.lineTo(width, dividerY);
+            context.strokeStyle = "#111111";
+            context.stroke();
+
+            // 75%
+            context.beginPath();
+            dividerY = height * 3.0 / 4.0;
+            context.moveTo(0, dividerY);
+            context.lineTo(width, dividerY);
+            context.strokeStyle = "#441111";
+            context.stroke();
+
+            // vertical dividers (days)
             context.globalAlpha = 0.3;
             context.beginPath();
-            context.lineWidth = 3;
-            for (var dividerIdx = 0; dividerIdx < count; ++dividerIdx)
+            for (var verticalDividerIdx = 0; verticalDividerIdx < count; ++verticalDividerIdx)
             {
                 var dividerTime = new Date(Date.now());
-                dividerTime.setDate(dividerTime.getDate() - dayOffset - dividerIdx);
+                dividerTime.setDate(dividerTime.getDate() - dayOffset - verticalDividerIdx);
                 dividerTime.setHours(0);
                 dividerTime.setMinutes(0);
                 dividerTime.setSeconds(0);
