@@ -15,6 +15,7 @@ public:
 protected:
     bool readFileAsString(const QString &filename, QString &output) const;
     bool readFileAsInteger(const QString &filename, int &output) const;
+    QString get_value(const QString &filename, QString in_variable) const;
 
 };
 

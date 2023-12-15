@@ -12,6 +12,14 @@ const QString BatteryInfo::FILENAME_SYSFS_ENERGY_FULL_DESIGN = "energy_full_desi
 const QString BatteryInfo::FILENAME_SYSFS_STATUS             = "status";
 const QString BatteryInfo::FILENAME_SYSFS_HEALTH             = "health";
 
+const QString BatteryInfo::BASE_PATH_BATTERY_BMS_FILE        = "/sys/class/power_supply/battery/subsystem/bms/uevent";
+const QString BatteryInfo::FILENAME_SYSFS_CHARGE             = "POWER_SUPPLY_CHARGE_NOW_RAW";
+const QString BatteryInfo::FILENAME_SYSFS_CHARGE_FULL        = "POWER_SUPPLY_CHARGE_FULL";
+const QString BatteryInfo::FILENAME_SYSFS_CHARGE_FULL_DESIGN = "POWER_SUPPLY_CHARGE_FULL_DESIGN";
+
+const QString BatteryInfo::OS_RELEASE_FILE                   = "/etc/os-release";
+const QString BatteryInfo::OS_VERSION_STRING                 = "VERSION_ID";
+
 const QString BatteryInfo::BASE_PATH_STATEFS                 = "/run/state/namespaces/Battery/";
 const QString BatteryInfo::FILENAME_STATEFS_CAPACITY         = "ChargePercentage";
 const QString BatteryInfo::FILENAME_STATEFS_CURRENT          = "Current";
@@ -29,6 +37,9 @@ BatteryInfo::BatteryInfo(QObject *parent) :
     QObject(parent), m_valid(false), m_capacity(0), m_current(0), m_voltage(0), m_energy(0), m_energy_full(0),
     m_energy_full_design(0), m_status(UNKNOWN_STATUS), m_health(UNKNOWN_HEALTH)
 {
+    m_os_version = get_value(OS_RELEASE_FILE, OS_VERSION_STRING).split(".")[0].toInt();
+    if(m_os_version == 0)
+        m_os_version = 4;
 }
 
 // -----------------------------------------------------------------------
@@ -92,6 +103,7 @@ void BatteryInfo::updateVoltage()
         if (new_voltage != m_voltage)
         {
             m_voltage = new_voltage;
+            m_voltage_V = qRound(new_voltage / 1000.0f);
             emit signalVoltageChanged();
         }
     }
@@ -101,45 +113,100 @@ void BatteryInfo::updateVoltage()
 
 void BatteryInfo::updateEnergy()
 {
-    // full energy level
-    int new_energy_full = 0;
-    if (readFileAsInteger(BASE_PATH_SYSFS + FILENAME_SYSFS_ENERGY_FULL, new_energy_full) || readFileAsInteger(BASE_PATH_STATEFS + FILENAME_STATEFS_ENERGY_FULL, new_energy_full))
-    {
-        new_energy_full = qRound(new_energy_full / 1000.0f);
-        if (new_energy_full != m_energy_full)
+    if(m_os_version < 4) {
+        // full energy level
+        int new_energy_full = 0;
+        if (readFileAsInteger(BASE_PATH_SYSFS + FILENAME_SYSFS_ENERGY_FULL, new_energy_full) || readFileAsInteger(BASE_PATH_STATEFS + FILENAME_STATEFS_ENERGY_FULL, new_energy_full))
         {
-            m_energy_full = new_energy_full;
-            emit signalEnergyFullChanged();
+            new_energy_full = qRound(new_energy_full / 1000.0f);
+            if (new_energy_full != m_energy_full)
+            {
+                m_energy_full = new_energy_full;
+                emit signalEnergyFullChanged();
+            }
         }
+
+        // energy level (value for a brand new battery)
+        int new_energy_full_design = 0;
+        if (readFileAsInteger(BASE_PATH_SYSFS + FILENAME_SYSFS_ENERGY_FULL_DESIGN, new_energy_full_design))
+            new_energy_full_design = qRound(new_energy_full_design / 1000.0f);
+        else
+            new_energy_full_design = new_energy_full;
+
+        if (new_energy_full_design != m_energy_full_design)
+        {
+            m_energy_full_design = new_energy_full_design;
+            emit signalEnergyFullDesignChanged();
+        }
+
+        // current energy level
+        int new_energy = 0;
+        if (readFileAsInteger(BASE_PATH_SYSFS + FILENAME_SYSFS_ENERGY, new_energy) || readFileAsInteger(BASE_PATH_STATEFS + FILENAME_STATEFS_ENERGY, new_energy))
+            new_energy = qRound(new_energy / 1000.0f);
+        else
+            new_energy = m_energy_full * m_capacity / 100.0f;
+
+        if (new_energy > new_energy_full)
+            new_energy = m_energy_full * m_capacity / 100.0f;
+
+        if (new_energy != m_energy)
+        {
+            m_energy = new_energy;
+            emit signalEnergyChanged();
+        }
+
     }
-
-    // energy level (value for a brand new battery)
-    int new_energy_full_design = 0;
-    if (readFileAsInteger(BASE_PATH_SYSFS + FILENAME_SYSFS_ENERGY_FULL_DESIGN, new_energy_full_design))
-        new_energy_full_design = qRound(new_energy_full_design / 1000.0f);
-    else
-        new_energy_full_design = new_energy_full;
-
-    if (new_energy_full_design != m_energy_full_design)
+    else 
     {
-        m_energy_full_design = new_energy_full_design;
-        emit signalEnergyFullDesignChanged();
-    }
+        // full energy level
+        int new_energy_full = 0;
+        int get_energy = get_value(BASE_PATH_BATTERY_BMS_FILE, FILENAME_SYSFS_CHARGE_FULL).toInt();
+        get_energy *= m_voltage_V;
+        
+        if (get_energy != 0)
+        {
+            new_energy_full = qRound(get_energy / 1000.0f);
+            if (new_energy_full != m_energy_full)
+            {
+                m_energy_full = new_energy_full;
+                emit signalEnergyFullChanged();
+            }
+        }
 
-    // current energy level
-    int new_energy = 0;
-    if (readFileAsInteger(BASE_PATH_SYSFS + FILENAME_SYSFS_ENERGY, new_energy) || readFileAsInteger(BASE_PATH_STATEFS + FILENAME_STATEFS_ENERGY, new_energy))
-        new_energy = qRound(new_energy / 1000.0f);
-    else
-        new_energy = m_energy_full * m_capacity / 100.0f;
+        // energy level (value for a brand new battery)
+        int new_energy_full_design = 0;
+        int get_energy_design = get_value(BASE_PATH_BATTERY_BMS_FILE, FILENAME_SYSFS_CHARGE_FULL_DESIGN).toInt();
+        get_energy_design *= m_voltage_V;
 
-    if (new_energy > new_energy_full)
-        new_energy = m_energy_full * m_capacity / 100.0f;
+        if (get_energy_design != 0)
+            new_energy_full_design = qRound(get_energy_design / 1000.0f);
+        else
+            new_energy_full_design = new_energy_full;
 
-    if (new_energy != m_energy)
-    {
-        m_energy = new_energy;
-        emit signalEnergyChanged();
+        if (new_energy_full_design != m_energy_full_design)
+        {
+            m_energy_full_design = new_energy_full_design;
+            emit signalEnergyFullDesignChanged();
+        }
+
+        // current energy level
+        int new_energy = 0;
+        int get_energy_now = get_value(BASE_PATH_BATTERY_BMS_FILE, FILENAME_SYSFS_CHARGE).toInt();
+        get_energy_now *= m_voltage_V;
+
+        if (get_energy_now != 0)
+            new_energy = qRound(get_energy_now / 1000.0f);
+        else
+            new_energy = m_energy_full * m_capacity / 100.0f;
+
+        if (new_energy > new_energy_full)
+            new_energy = m_energy_full * m_capacity / 100.0f;
+
+        if (new_energy != m_energy)
+        {
+            m_energy = new_energy;
+            emit signalEnergyChanged();
+        }
     }
 }
 
