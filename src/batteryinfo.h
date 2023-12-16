@@ -60,6 +60,14 @@ private:
     static const QString FILENAME_SYSFS_STATUS;
     static const QString FILENAME_SYSFS_HEALTH;
 
+    static const QString BASE_PATH_BATTERY_BMS_FILE;
+    static const QString FILENAME_SYSFS_CHARGE;
+    static const QString FILENAME_SYSFS_CHARGE_FULL;
+    static const QString FILENAME_SYSFS_CHARGE_FULL_DESIGN;
+
+    static const QString OS_RELEASE_FILE;
+    static const QString OS_VERSION_STRING;
+
     static const QString BASE_PATH_STATEFS;
     static const QString FILENAME_STATEFS_CAPACITY;
     static const QString FILENAME_STATEFS_CURRENT;
@@ -83,9 +91,12 @@ private:
     int m_capacity;           // 0 - 100 %
     int m_current;            // [mA]
     int m_voltage;            // [mV]
+    int m_voltage_V;          // [V]
     int m_energy;             // [mWh]
     int m_energy_full;        // [mWh]
     int m_energy_full_design; // [mWh]
+    int m_os_version;
+    
     QString m_status;
     QString m_health;
 
