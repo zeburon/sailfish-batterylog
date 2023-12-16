@@ -6,6 +6,6 @@ Exec=harbour-batterylog
 Name=Battery Log
 
 [X-Sailjail]
-Permissions=
+Sandboxing=Disabled
 OrganizationName=org.batterylog
 ApplicationName=Battery Log
