@@ -4,3 +4,8 @@ X-Nemo-Application-Type=silica-qt5
 Icon=harbour-batterylog
 Exec=harbour-batterylog
 Name=Battery Log
+
+[X-Sailjail]
+Permissions=
+OrganizationName=org.batterylog
+ApplicationName=Battery Log
